@@ -1,0 +1,45 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "podfetch_flutter",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "podfetch_flutter (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "podfetch_flutter (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "podfetch_api",
+            "cwd": "podfetch_api",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "podfetch_api (profile mode)",
+            "cwd": "podfetch_api",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "podfetch_api (release mode)",
+            "cwd": "podfetch_api",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}
