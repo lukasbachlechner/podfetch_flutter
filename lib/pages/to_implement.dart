@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:podfetch_flutter/widgets/base/page_wrap.dart';
+import '../widgets/base/page_wrap.dart';
 
 class ToImplement extends StatelessWidget {
   const ToImplement({Key? key, required this.title}) : super(key: key);

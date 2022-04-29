@@ -1,26 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:podfetch_flutter/providers.dart';
+import 'package:podfetch_flutter/widgets/base/app_bar.dart';
 
-class PageWrap extends StatelessWidget {
-  const PageWrap({Key? key, required this.child, this.fixed}) : super(key: key);
+class PageWrap extends ConsumerWidget {
+  const PageWrap({
+    Key? key,
+    required this.child,
+    this.showAppBar = true,
+    this.title,
+  }) : super(key: key);
   final Widget child;
-  final Widget? fixed;
+  final bool showAppBar;
+  final String? title;
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).backgroundColor,
-      child: Column(
-        children: [
-          fixed != null
-              ? Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: fixed,
-                )
-              : const SizedBox(),
-          Expanded(
-            child: SingleChildScrollView(child: child),
-          ),
-        ],
-      ),
-    );
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Container(color: Theme.of(context).backgroundColor, child: child);
   }
 }

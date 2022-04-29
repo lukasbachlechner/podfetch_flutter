@@ -1,13 +1,19 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:podfetch_flutter/theme.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:podfetch_flutter/pages/splash_page.dart';
+import 'package:podfetch_flutter/service_locator.dart';
 
 import 'routes/router.gr.dart';
+import 'theme.dart';
 
 void main() {
-  runApp(AppWidget());
+  setupLocators();
+  runApp(
+    ProviderScope(
+      child: AppWidget(),
+    ),
+  );
 }
 
 class AppWidget extends StatelessWidget {

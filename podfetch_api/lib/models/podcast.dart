@@ -51,4 +51,16 @@ class Podcast implements Model {
       'categories': categories.map((e) => e.toJson()).toList(),
     };
   }
+
+  String getProxyImageUrl({int size = 120}) {
+    final encodedUrl = Uri.encodeComponent(image);
+    return 'https://api.podfetch.app/v1/image/${size.toString()}/$encodedUrl';
+  }
+
+  String get safeImage {
+    bool isUriValid = Uri.parse(image).host.isNotEmpty;
+    if (isUriValid) return image;
+
+    return 'https://via.placeholder.com/200';
+  }
 }

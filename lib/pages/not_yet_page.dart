@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:podfetch_flutter/widgets/base/page_wrap.dart';
+import 'package:podfetch_flutter/widgets/page/page_header.dart';
+import '../widgets/base/page_wrap.dart';
 
 class NotYetPage extends StatelessWidget {
   const NotYetPage({Key? key}) : super(key: key);
@@ -8,16 +9,15 @@ class NotYetPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PageWrap(
-        child: Center(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            context.router.routeData.path.toUpperCase().toString(),
-            style: Theme.of(context).textTheme.headline1,
+          PfPageHeader(
+            title: context.router.routeData.path.toUpperCase(),
           ),
           const Text('Implement me :)'),
         ],
       ),
-    ));
+    );
   }
 }
