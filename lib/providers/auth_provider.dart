@@ -23,6 +23,10 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     return state.isLoggedIn;
   }
 
+  String? get token {
+    return state.token;
+  }
+
   Future<bool> login(String email, String password) async {
     try {
       final response = await apiProvider.login({
@@ -39,6 +43,6 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
 }
 
 final authProvider = StateNotifierProvider<AuthStateNotifier, AuthState>((ref) {
-  final PodfetchApiProvider podfetchApiProvider = ref.watch(apiProvider);
+  final podfetchApiProvider = ref.read(apiProvider);
   return AuthStateNotifier(AuthState(null, null), podfetchApiProvider);
 });

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:podfetch_flutter/providers/auth_provider.dart';
 import 'package:podfetch_flutter/routes/guards/auth_guard.dart';
 import 'package:podfetch_flutter/service_locator.dart';
 import 'package:socket_io_client/socket_io_client.dart';

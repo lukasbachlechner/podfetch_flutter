@@ -9,10 +9,10 @@ final getIt = GetIt.instance;
 void setupLocators() {
   getIt.registerLazySingleton<PodfetchApiProvider>(() {
     final dio = Dio();
-    dio.interceptors.add(PrettyDioLogger(
+    /*  dio.interceptors.add(PrettyDioLogger(
       // responseBody: true,
       requestBody: true,
-    ));
+    )); */
     return PodfetchLegacyProvider(dio, baseUrl: 'http://localhost:3333/v1/');
   });
 

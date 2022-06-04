@@ -10,6 +10,17 @@ import 'package:podfetch_flutter/widgets/notifications/notification_bar.dart';
 class LoginPage extends HookConsumerWidget {
   const LoginPage({Key? key, required this.onLogin}) : super(key: key);
   final Function() onLogin;
+
+  void _tryLogin(WidgetRef ref, String email, String password,
+      VoidCallback onSuccess, VoidCallback onError) async {
+    final auth = await ref.watch(authProvider.notifier).login(email, password);
+    if (auth) {
+      onSuccess();
+    } else {
+      onError();
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final loading = useState(false);
@@ -19,26 +30,23 @@ class LoginPage extends HookConsumerWidget {
     return FlowPageWrapper(
       title: 'Welcome back!',
       bottomSheet: PfButton(
-        onPressed: () async {
+        onPressed: () {
+          formKey.currentState!.validate();
           formKey.currentState!.save();
-          final auth = await ref
-              .read(authProvider.notifier)
-              .login(emailState.value!, passwordState.value!);
-          if (auth) {
-            await context.router.pop().then((_) {
+          _tryLogin(ref, emailState.value!, passwordState.value!, () {
+            context.router.pop().then((_) {
               const NotificationBar(
-                message: 'Logged in.',
+                message: 'Successfully logged in.',
                 notificationType: NotificationBarType.success,
               ).show(context);
             });
-
-            return onLogin();
-          } else {
-            await const NotificationBar(
-              message: 'Wrong credentials :(',
+            onLogin();
+          }, () {
+            const NotificationBar(
+              message: 'Invalid credentials.',
               notificationType: NotificationBarType.error,
             ).show(context);
-          }
+          });
         },
         buttonType: ButtonType.accent,
         buttonWidth: ButtonWidth.full,

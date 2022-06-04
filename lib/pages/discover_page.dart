@@ -14,7 +14,7 @@ class DiscoverPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    PodfetchApiProvider client = ref.read(apiProvider);
+    PodfetchApiProvider client = ref.watch(apiProvider);
     final discoverRequestKey = useState<UniqueKey>(UniqueKey());
 
     return PageWrap(
