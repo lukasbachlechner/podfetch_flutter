@@ -173,6 +173,24 @@ class PodfetchStaticCategoriesRepository {
   List<StaticCategory> getAll() {
     return _allCategories;
   }
+
+  List<StaticCategory> getAllFlat() {
+    final List<StaticCategory> result = [];
+    for (var category in _allCategories) {
+      result.add(category);
+      if (category.children != null && category.children!.isNotEmpty) {
+        result.addAll(category.children!.toList());
+      }
+    }
+    return result;
+  }
+
+  List<StaticCategory?> getAllByIds(List<int> ids) {
+    final allCategories = getAllFlat();
+    return allCategories
+        .where((category) => ids.contains(category.id))
+        .toList();
+  }
 }
 
 class StaticCategory {

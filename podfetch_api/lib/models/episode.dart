@@ -1,6 +1,5 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:intl/intl.dart';
 import 'package:podfetch_api/models/model.dart';
-import 'package:podfetch_api/models/podcast.dart';
 
 /// @TODO: get the podcastTitle if it's not present in the json
 class Episode implements Model {
@@ -83,4 +82,18 @@ class Episode implements Model {
         'playbackTime': playbackTime,
         'podcastTitle': podcastTitle,
       };
+
+  String get datePublishedFormatted {
+    DateTime date = DateTime.fromMicrosecondsSinceEpoch(
+      datePublished * 1000000,
+    );
+
+    return DateFormat.MMMd().format(date);
+  }
+
+  String get audioDurationFormatted {
+    Duration duration = Duration(seconds: audioDuration);
+
+    return duration.inMinutes.toString() + ' min';
+  }
 }

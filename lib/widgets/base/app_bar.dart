@@ -3,52 +3,35 @@ import 'dart:ui';
 import 'package:auto_route/auto_route.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:podfetch_flutter/providers.dart';
 
-import '../../delegates/search/search_delegate.dart';
 import '../buttons/icon_button.dart';
 
 class PfAppBar extends ConsumerWidget implements PreferredSizeWidget {
-  const PfAppBar({Key? key, this.title}) : super(key: key);
+  const PfAppBar({
+    Key? key,
+    this.title,
+    this.actions,
+    required this.tabsRouter,
+  }) : super(key: key);
+
   final String? title;
+  final List<Widget>? actions;
+  final TabsRouter tabsRouter;
 
   @override
   PreferredSizeWidget build(BuildContext context, WidgetRef ref) {
     return AppBar(
+      automaticallyImplyLeading: false,
       backgroundColor: Colors.transparent, // Theme.of(context).primaryColor,
-      leadingWidth: 80.0,
       elevation: 0.0,
-      leading: context.watchRouter.canPopSelfOrChildren
-          ? PfAppBarCircleButton(
-              onTap: () {
-                context.router.popTop();
-              },
-              icon: const Icon(
-                BootstrapIcons.arrow_left,
-                size: 20,
-              ),
+      leading: tabsRouter.canPopSelfOrChildren
+          ? PfIconButton(
+              onPressed: () => context.router.popTop(),
+              icon: const Icon(BootstrapIcons.arrow_left),
             )
-          : const SizedBox.shrink(),
-      actions: [
-        PfAppBarCircleButton(
-          onTap: () {
-            showSearch(
-              context: context,
-              delegate: PfSearchDelegate(),
-              useRootNavigator: true,
-            );
-          },
-          icon: const Icon(
-            BootstrapIcons.search,
-            size: 20,
-          ),
-        ),
-        const SizedBox(
-          width: 8.0,
-        ),
-      ],
+          : null,
+      actions: [...?actions],
     );
   }
 

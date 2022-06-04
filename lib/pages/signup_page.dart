@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:podfetch_flutter/routes/router.gr.dart';
 
-class LoginPage extends HookWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class SignupPage extends HookWidget {
+  const SignupPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final _email = useState<String>('');
-    final _password = useState<String>('');
+    final email = useState<String>('');
+    final password = useState<String>('');
     return Material(
       child: Stack(
         children: [
@@ -17,14 +17,14 @@ class LoginPage extends HookWidget {
             routes: (_) {
               return [
                 EmailRoute(onNext: (value) {
-                  _email.value = value;
+                  email.value = value;
                 }),
-                if (_email.value.isNotEmpty)
+                if (email.value.isNotEmpty)
                   PasswordRoute(onNext: (value) {
-                    _password.value = value;
-                    context.router.root.replaceAll([HomeRouter()]);
+                    password.value = value;
+                    context.router.root.replaceAll([const HomeRouter()]);
                     ScaffoldMessenger.of(context)
-                        .showSnackBar(SnackBar(content: Text('Success')));
+                        .showSnackBar(const SnackBar(content: Text('Success')));
                   }),
               ];
             },
@@ -32,8 +32,9 @@ class LoginPage extends HookWidget {
           Padding(
             padding: const EdgeInsets.all(80.0),
             child: ElevatedButton(
-                onPressed: () => context.router.root.replaceAll([HomeRouter()]),
-                child: Text('Close')),
+                onPressed: () =>
+                    context.router.root.replaceAll([const HomeRouter()]),
+                child: const Text('Close')),
           ),
         ],
       ),

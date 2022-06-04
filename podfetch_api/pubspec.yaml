@@ -12,6 +12,7 @@ dependencies:
   dio: ^4.0.6
   flutter:
     sdk: flutter
+  intl: ^0.17.0
   json_annotation:
   retrofit: ">=3.0.0 <4.0.0"
 

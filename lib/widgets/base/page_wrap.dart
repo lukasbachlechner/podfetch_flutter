@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:podfetch_flutter/providers.dart';
-import 'package:podfetch_flutter/widgets/base/app_bar.dart';
 
 class PageWrap extends ConsumerWidget {
   const PageWrap({

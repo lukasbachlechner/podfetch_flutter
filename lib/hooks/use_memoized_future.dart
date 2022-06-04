@@ -6,8 +6,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 class MemoizedAsyncSnapshot<T> {
   final AsyncSnapshot<T> snapshot;
   final Function() refresh;
+  final int refreshKey;
 
-  const MemoizedAsyncSnapshot(this.snapshot, this.refresh);
+  const MemoizedAsyncSnapshot(this.snapshot, this.refresh, this.refreshKey);
 }
 
 /// Subscribes to a [Future] and returns its current state in a
@@ -38,5 +39,5 @@ MemoizedAsyncSnapshot<T> useMemoizedFuture<T>(
 
   void refreshMe() => refresh.value++;
 
-  return MemoizedAsyncSnapshot<T>(result, refreshMe);
+  return MemoizedAsyncSnapshot<T>(result, refreshMe, refresh.value);
 }

@@ -7,6 +7,10 @@ const lightBlue = Color(0xff191345);
 const accentRed = Color(0xfff24162);
 const white = Colors.white;
 
+const uiError = Colors.red;
+const uiSuccess = Colors.green;
+const uiWarning = Colors.amber;
+
 const kPagePadding = 16.0;
 
 final pfDefaultTheme = ThemeData(
@@ -16,6 +20,7 @@ final pfDefaultTheme = ThemeData(
   primaryColorLight: lightBlue,
   highlightColor: accentRed,
   backgroundColor: darkBlue,
+  progressIndicatorTheme: const ProgressIndicatorThemeData(color: white),
   scaffoldBackgroundColor: darkBlue,
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: mediumBlue,
@@ -32,11 +37,18 @@ final pfDefaultTheme = ThemeData(
     bodyColor: white,
   ),
   inputDecorationTheme: InputDecorationTheme(
-    border: OutlineInputBorder(borderSide: BorderSide(color: white)),
-    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: white)),
+    isDense: true,
+    contentPadding:
+        const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
+    border: const OutlineInputBorder(borderSide: BorderSide(color: white)),
+    focusedBorder:
+        const OutlineInputBorder(borderSide: BorderSide(color: white)),
+    enabledBorder: const OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.transparent)),
     filled: true,
     fillColor: white.withOpacity(.05),
     prefixIconColor: white,
     suffixIconColor: white,
+    labelStyle: const TextStyle(color: white),
   ),
 );

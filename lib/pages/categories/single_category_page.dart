@@ -1,17 +1,10 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'package:podfetch_api/models/podcast.dart';
 import 'package:podfetch_api/podfetch_api.dart';
-import 'package:podfetch_api/providers/api_provider.dart';
-import 'package:podfetch_flutter/pages/login_page.dart';
 import 'package:podfetch_flutter/service_locator.dart';
 import 'package:podfetch_flutter/widgets/typography/heading.dart';
 
-import '../../routes/router.gr.dart';
 import '../../widgets/base/page_wrap.dart';
-import '../../widgets/podcasts_scroll_list/podcasts_scroll_list.dart';
 
 class SingleCategoryPage extends StatelessWidget {
   const SingleCategoryPage(
@@ -20,8 +13,6 @@ class SingleCategoryPage extends StatelessWidget {
   final int categoryId;
   @override
   Widget build(BuildContext context) {
-    final client = getIt<PodfetchApiProvider>();
-
     var allCategories = getIt<PodfetchStaticCategoriesRepository>().getAll();
     return PageWrap(
       child: SingleChildScrollView(

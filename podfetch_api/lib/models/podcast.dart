@@ -1,4 +1,3 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:podfetch_api/models/category.dart';
 import 'package:podfetch_api/models/episode.dart';
 import 'package:podfetch_api/models/model.dart';
@@ -62,5 +61,9 @@ class Podcast implements Model {
     if (isUriValid) return image;
 
     return 'https://via.placeholder.com/200';
+  }
+
+  List<int> get categoryIds {
+    return categories.map((category) => category.id).toList();
   }
 }

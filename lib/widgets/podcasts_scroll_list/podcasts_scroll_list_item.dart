@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:podfetch_api/models/podcast.dart';
 import 'package:podfetch_flutter/routes/router.gr.dart';
 import 'package:podfetch_flutter/widgets/skeleton/skeleton_box.dart';
-import 'package:shimmer/shimmer.dart';
 
 class PodcastsScrollListItem extends StatelessWidget {
   const PodcastsScrollListItem({Key? key, required this.podcast})
@@ -12,15 +11,17 @@ class PodcastsScrollListItem extends StatelessWidget {
   final Podcast podcast;
   @override
   Widget build(BuildContext context) {
-    const double _boxSize = 144.0;
+    const double boxSize = 144.0;
 
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
       child: SizedBox(
-        width: _boxSize,
+        width: boxSize,
         child: GestureDetector(
           onTap: () {
-            context.navigateTo(SinglePodcastRoute(podcast: podcast));
+            context.navigateTo(
+              SinglePodcastRoute(podcast: podcast, podcastId: podcast.id),
+            );
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,22 +33,26 @@ class PodcastsScrollListItem extends StatelessWidget {
                   visible: true,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(4.0),
-                    child: Container(
-                      color: Theme.of(context).primaryColor,
-                      child: CachedNetworkImage(
-                        imageUrl: podcast.safeImage,
-                        errorWidget: (context, String error, __) {
-                          return const Center(
-                            child: Icon(Icons.warning),
-                          );
-                        },
-                        placeholder: (_, __) {
-                          return Container(
-                            color: Theme.of(context).primaryColor,
-                            width: _boxSize,
-                            height: _boxSize,
-                          );
-                        },
+                    child: AspectRatio(
+                      aspectRatio: 1.0,
+                      child: Container(
+                        color: Theme.of(context).primaryColor,
+                        child: CachedNetworkImage(
+                          imageUrl: podcast.safeImage,
+                          fit: BoxFit.cover,
+                          errorWidget: (context, String error, __) {
+                            return const Center(
+                              child: Icon(Icons.warning),
+                            );
+                          },
+                          placeholder: (_, __) {
+                            return Container(
+                              color: Theme.of(context).primaryColor,
+                              width: boxSize,
+                              height: boxSize,
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
@@ -79,17 +84,17 @@ class PodcastsScrollListItemSkeleton extends StatelessWidget {
   const PodcastsScrollListItemSkeleton({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    const double _boxSize = 144.0;
+    const double boxSize = 144.0;
 
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
       child: SizedBox(
-        width: _boxSize,
+        width: boxSize,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: const [
-            SkeletonBox(height: _boxSize),
+            SkeletonBox(height: boxSize),
             SizedBox(
               height: 8.0,
             ),

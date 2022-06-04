@@ -16,16 +16,16 @@ class SkeletonBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double? _usedHeight = height;
+    double? usedHeight = height;
     if (textStyle != null) {
-      _usedHeight = _calculateTextSize().height;
+      usedHeight = _calculateTextSize().height;
     }
     return Shimmer.fromColors(
       baseColor: Theme.of(context).primaryColor,
       highlightColor: Theme.of(context).primaryColorLight,
       child: Container(
         width: width,
-        height: _usedHeight,
+        height: usedHeight,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(borderRadius),

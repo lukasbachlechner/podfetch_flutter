@@ -4,35 +4,40 @@
 import 'package:auto_route/auto_route.dart';
 
 import 'package:podfetch_flutter/home_page.dart';
-import 'package:podfetch_flutter/pages/categories/categories_page.dart';
-import 'package:podfetch_flutter/pages/categories/single_category_page.dart';
 import 'package:podfetch_flutter/pages/discover_page.dart';
+import 'package:podfetch_flutter/pages/flows/login/login_page.dart';
 import 'package:podfetch_flutter/pages/flows/signup/email_page.dart';
 import 'package:podfetch_flutter/pages/lists_page.dart';
-import 'package:podfetch_flutter/pages/login_page.dart';
-import 'package:podfetch_flutter/pages/not_yet_page.dart';
+import 'package:podfetch_flutter/pages/signup_page.dart';
 import 'package:podfetch_flutter/pages/search_page.dart';
 import 'package:podfetch_flutter/pages/settings_page.dart';
+import 'package:podfetch_flutter/pages/single_episode_page.dart';
 import 'package:podfetch_flutter/pages/single_podcast_page.dart';
+import 'package:podfetch_flutter/routes/guards/auth_guard.dart';
 
 import '../pages/flows/signup/password_page.dart';
-import '../pages/splash_page.dart';
 
 const podcastRoutes = [
   AutoRoute(path: ':podcastId', page: SinglePodcastPage),
+  AutoRoute(path: ':episodeId', page: SingleEpisodePage),
 ];
 
 @CupertinoAutoRouter(
   replaceInRouteName: 'Page,Route',
   routes: <AutoRoute>[
     CustomRoute(
-      page: LoginPage,
+      page: SignupPage,
       transitionsBuilder: TransitionsBuilders.fadeIn,
       path: '/login',
       children: [
         AutoRoute(page: EmailPage),
         AutoRoute(page: PasswordPage),
       ],
+    ),
+    CustomRoute(
+      page: LoginPage,
+      transitionsBuilder: TransitionsBuilders.noTransition,
+      path: '/login',
     ),
     CustomRoute(
       path: '/',
@@ -46,7 +51,7 @@ const podcastRoutes = [
           page: EmptyRouterPage,
           children: [
             AutoRoute(path: '', page: DiscoverPage),
-            AutoRoute(path: ':podcastId', page: SinglePodcastPage),
+            ...podcastRoutes,
           ],
         ),
         AutoRoute(
@@ -63,7 +68,7 @@ const podcastRoutes = [
           name: 'ListsRouter',
           page: EmptyRouterPage,
           children: [
-            AutoRoute(path: '', page: ListsPage),
+            AutoRoute(path: '', page: ListsPage, guards: [AuthGuard]),
           ],
         ),
         AutoRoute(

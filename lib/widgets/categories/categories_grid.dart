@@ -13,8 +13,8 @@ class CategoriesGrid extends StatelessWidget {
   final double aspectRatio;
   @override
   Widget build(BuildContext context) {
-    final _allCategories = getIt<PodfetchStaticCategoriesRepository>().getAll();
-    final _rowsNeeded = (_allCategories.length / columnCount).ceil();
+    final allCategories = getIt<PodfetchStaticCategoriesRepository>().getAll();
+    final rowsNeeded = (allCategories.length / columnCount).ceil();
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: kPagePadding),
@@ -22,9 +22,9 @@ class CategoriesGrid extends StatelessWidget {
         rowGap: 24.0,
         columnGap: 12.0,
         columnSizes: List.filled(columnCount, 1.fr),
-        rowSizes: List.filled(_rowsNeeded, auto),
+        rowSizes: List.filled(rowsNeeded, auto),
         children: [
-          ..._allCategories
+          ...allCategories
               .map(
                 (category) => CategoriesGridItem(
                   category: category,
