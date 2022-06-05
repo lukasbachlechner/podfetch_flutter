@@ -1,6 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:podfetch_flutter/providers/auth_provider.dart';
 import 'package:podfetch_flutter/theme.dart';
 import 'package:podfetch_flutter/widgets/base/app_bar.dart';
 import 'package:podfetch_flutter/widgets/base/bottom_navigation_bar.dart';
@@ -10,11 +13,16 @@ import 'package:we_slide/we_slide.dart';
 
 import 'routes/router.gr.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends HookConsumerWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<AuthState>(authProvider, (previous, next) {
+      if (next.isLoggedIn == false) {
+        print('is not logged in anymore');
+      }
+    });
     return WillPopScope(
       onWillPop: () async {
         if (context.router.canPopSelfOrChildren) {

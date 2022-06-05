@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:podfetch_api/models/user.dart';
 import 'package:podfetch_api/providers/api_provider.dart';
@@ -16,8 +17,11 @@ class AuthState {
 }
 
 class AuthStateNotifier extends StateNotifier<AuthState> {
-  AuthStateNotifier(AuthState state, this.apiProvider) : super(state);
+  AuthStateNotifier(AuthState state, this.apiProvider) : super(state) {
+    getUser();
+  }
   final PodfetchApiProvider apiProvider;
+  final FlutterSecureStorage storage = const FlutterSecureStorage();
 
   bool get isLoggedIn {
     return state.isLoggedIn;
@@ -34,10 +38,34 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         'password': password,
       });
       state = AuthState(response.token, response.user);
+      await storage.write(key: 'api-token', value: token);
       return true;
     } on DioError catch (e) {
       print(e.response?.data?.toString());
       return false;
+    }
+  }
+
+  Future<void> getUser() async {
+    final token = await storage.read(key: 'api-token');
+    if (token == null) {
+      return;
+    }
+    try {
+      final user = await apiProvider.getUser(bearerToken: 'Bearer $token');
+      state = AuthState(token, user);
+    } on DioError catch (e) {
+      print(e.response?.data?.toString());
+    }
+  }
+
+  Future<void> logout() async {
+    try {
+      await apiProvider.logout();
+      await storage.delete(key: 'api-token');
+      state = AuthState(null, null);
+    } on DioError catch (e) {
+      print(e.response?.data?.toString());
     }
   }
 }

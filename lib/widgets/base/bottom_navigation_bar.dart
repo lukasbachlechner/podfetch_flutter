@@ -75,8 +75,8 @@ class PfBottomNavigationBar extends StatelessWidget {
           if (tabsRouter.activeIndex != newIndex) {
             tabsRouter.setActiveIndex(newIndex);
           } else {
-            // tabsRouter.stackRouterOfIndex(newIndex)?.popUntilRoot();
-            tabsRouter.popTop();
+            tabsRouter.stackRouterOfIndex(newIndex)?.popUntilRoot();
+            // tabsRouter.popTop();
           }
         },
         currentIndex: tabsRouter.activeIndex,

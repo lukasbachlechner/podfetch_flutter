@@ -5,7 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 /// that should re-call the future that was used to generate the [snapshot].
 class MemoizedAsyncSnapshot<T> {
   final AsyncSnapshot<T> snapshot;
-  final Function() refresh;
+  final Future<void> Function() refresh;
   final int refreshKey;
 
   const MemoizedAsyncSnapshot(this.snapshot, this.refresh, this.refreshKey);
@@ -37,7 +37,7 @@ MemoizedAsyncSnapshot<T> useMemoizedFuture<T>(
     preserveState: preserveState,
   );
 
-  void refreshMe() => refresh.value++;
+  Future<void> refreshMe() async => refresh.value++;
 
   return MemoizedAsyncSnapshot<T>(result, refreshMe, refresh.value);
 }

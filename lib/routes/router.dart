@@ -13,13 +13,15 @@ import 'package:podfetch_flutter/pages/search_page.dart';
 import 'package:podfetch_flutter/pages/settings_page.dart';
 import 'package:podfetch_flutter/pages/single_episode_page.dart';
 import 'package:podfetch_flutter/pages/single_podcast_page.dart';
-import 'package:podfetch_flutter/routes/guards/auth_guard.dart';
 
 import '../pages/flows/signup/password_page.dart';
 
 const podcastRoutes = [
   AutoRoute(path: ':podcastId', page: SinglePodcastPage),
-  AutoRoute(path: ':episodeId', page: SingleEpisodePage),
+  AutoRoute(
+    path: ':episodeId',
+    page: SingleEpisodePage,
+  ),
 ];
 
 @CupertinoAutoRouter(
@@ -28,7 +30,7 @@ const podcastRoutes = [
     CustomRoute(
       page: SignupPage,
       transitionsBuilder: TransitionsBuilders.fadeIn,
-      path: '/login',
+      path: '/signup',
       children: [
         AutoRoute(page: EmailPage),
         AutoRoute(page: PasswordPage),
@@ -68,7 +70,10 @@ const podcastRoutes = [
           name: 'ListsRouter',
           page: EmptyRouterPage,
           children: [
-            AutoRoute(path: '', page: ListsPage, guards: [AuthGuard]),
+            AutoRoute(
+              path: '',
+              page: ListsPage,
+            ),
           ],
         ),
         AutoRoute(

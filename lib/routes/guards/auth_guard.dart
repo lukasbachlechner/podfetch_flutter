@@ -3,15 +3,17 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:podfetch_flutter/providers/auth_provider.dart';
 import 'package:podfetch_flutter/routes/router.gr.dart';
 
-class AuthGuard extends AutoRouteGuard {
+class AuthGuard extends AutoRedirectGuardBase {
   final WidgetRef _ref;
 
   AuthGuard(this._ref);
   @override
   void onNavigation(NavigationResolver resolver, StackRouter router) {
-    if (_ref.watch(authProvider.notifier).isLoggedIn) {
+    if (_ref.watch(authProvider).isLoggedIn) {
+      print('is logged in!');
       resolver.next(true);
     } else {
+      print('is not logged in!');
       router.push(
         LoginRoute(
           onLogin: () {
@@ -21,5 +23,10 @@ class AuthGuard extends AutoRouteGuard {
         ),
       );
     }
+  }
+
+  @override
+  Future<bool> canNavigate(RouteMatch route) async {
+    return true;
   }
 }

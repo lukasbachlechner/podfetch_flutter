@@ -5,6 +5,7 @@ import 'package:podfetch_flutter/widgets/content_page/content_page_title_bar.dar
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../base/page_wrap.dart';
+import '../utils/spacer.dart';
 
 class ContentPage extends HookWidget {
   const ContentPage(
@@ -67,7 +68,8 @@ class ContentPage extends HookWidget {
                       }
                     },
                   ),
-                  ...body
+                  ...body,
+                  PfSpacer.bottom()
                 ],
               ),
             ),

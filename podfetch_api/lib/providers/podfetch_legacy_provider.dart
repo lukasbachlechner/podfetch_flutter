@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:podfetch_api/constants.dart';
 import 'package:podfetch_api/models/episode.dart';
 import 'package:podfetch_api/models/podcast.dart';
+import 'package:podfetch_api/models/user.dart';
 import 'package:podfetch_api/providers/api_provider.dart';
 import 'package:podfetch_api/responses/episodes_by_podcast_id_response.dart';
 import 'package:podfetch_api/responses/login_response.dart';
@@ -41,4 +42,12 @@ abstract class PodfetchLegacyProvider implements PodfetchApiProvider {
   @override
   @POST('auth/login')
   Future<LoginResponse> login(@Body() Map<String, dynamic> json);
+
+  @override
+  @POST('auth/logout')
+  Future<dynamic> logout();
+
+  @override
+  @GET('auth/me')
+  Future<User> getUser({@Header('Authorization') String? bearerToken});
 }

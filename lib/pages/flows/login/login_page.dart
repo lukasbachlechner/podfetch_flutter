@@ -39,8 +39,8 @@ class LoginPage extends HookConsumerWidget {
                 message: 'Successfully logged in.',
                 notificationType: NotificationBarType.success,
               ).show(context);
+              onLogin();
             });
-            onLogin();
           }, () {
             const NotificationBar(
               message: 'Invalid credentials.',

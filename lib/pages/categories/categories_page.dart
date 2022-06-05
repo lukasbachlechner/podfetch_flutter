@@ -13,7 +13,7 @@ class CategoriesPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final client = ref.watch(apiProvider);
-    final allCategories = getIt<PodfetchStaticCategoriesRepository>().getAll();
+    final allCategories = ref.watch(categoriesProvider).getAll();
 
     final rowsNeeded = (allCategories.length / 3).ceil();
 

@@ -98,8 +98,7 @@ class SinglePodcastPage extends HookConsumerWidget {
     final podcastFetch = useMemoizedFuture(() =>
         ref.watch(apiProvider).getPodcastById(podcastId, maxEpisodes: 10));
 
-    final staticCategoriesRepository =
-        getIt<PodfetchStaticCategoriesRepository>();
+    final staticCategoriesRepository = ref.watch(categoriesProvider);
 
     if (podcastToUse != null ||
         (podcastFetch.snapshot.hasData &&
@@ -110,6 +109,7 @@ class SinglePodcastPage extends HookConsumerWidget {
 
       return ContentPage(
         header: _buildHeader(context, staticCategories, podcastToUse),
+        onRefresh: () => podcastFetch.refresh(),
         headerImageUrl: podcastToUse.safeImage,
         body: [
           const SizedBox(

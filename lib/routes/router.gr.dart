@@ -12,8 +12,8 @@
 
 import 'package:auto_route/auto_route.dart' as _i6;
 import 'package:flutter/material.dart' as _i13;
-import 'package:podfetch_api/models/episode.dart' as _i16;
-import 'package:podfetch_api/models/podcast.dart' as _i15;
+import 'package:podfetch_api/models/episode.dart' as _i15;
+import 'package:podfetch_api/models/podcast.dart' as _i14;
 
 import '../home_page.dart' as _i3;
 import '../pages/discover_page.dart' as _i7;
@@ -26,15 +26,10 @@ import '../pages/settings_page.dart' as _i12;
 import '../pages/signup_page.dart' as _i1;
 import '../pages/single_episode_page.dart' as _i9;
 import '../pages/single_podcast_page.dart' as _i8;
-import 'guards/auth_guard.dart' as _i14;
 
 class AppRouter extends _i6.RootStackRouter {
-  AppRouter(
-      {_i13.GlobalKey<_i13.NavigatorState>? navigatorKey,
-      required this.authGuard})
+  AppRouter([_i13.GlobalKey<_i13.NavigatorState>? navigatorKey])
       : super(navigatorKey);
-
-  final _i14.AuthGuard authGuard;
 
   @override
   final Map<String, _i6.PageFactory> pagesMap = {
@@ -131,7 +126,7 @@ class AppRouter extends _i6.RootStackRouter {
 
   @override
   List<_i6.RouteConfig> get routes => [
-        _i6.RouteConfig(SignupRoute.name, path: '/login', children: [
+        _i6.RouteConfig(SignupRoute.name, path: '/signup', children: [
           _i6.RouteConfig(EmailRoute.name,
               path: 'email-page', parent: SignupRoute.name),
           _i6.RouteConfig(PasswordRoute.name,
@@ -166,7 +161,7 @@ class AppRouter extends _i6.RootStackRouter {
               parent: HomeRouter.name,
               children: [
                 _i6.RouteConfig(ListsRoute.name,
-                    path: '', parent: ListsRouter.name, guards: [authGuard])
+                    path: '', parent: ListsRouter.name)
               ]),
           _i6.RouteConfig(SettingsRouter.name,
               path: 'settings',
@@ -183,7 +178,7 @@ class AppRouter extends _i6.RootStackRouter {
 /// [_i1.SignupPage]
 class SignupRoute extends _i6.PageRouteInfo<void> {
   const SignupRoute({List<_i6.PageRouteInfo>? children})
-      : super(SignupRoute.name, path: '/login', initialChildren: children);
+      : super(SignupRoute.name, path: '/signup', initialChildren: children);
 
   static const String name = 'SignupRoute';
 }
@@ -315,7 +310,7 @@ class DiscoverRoute extends _i6.PageRouteInfo<void> {
 /// [_i8.SinglePodcastPage]
 class SinglePodcastRoute extends _i6.PageRouteInfo<SinglePodcastRouteArgs> {
   SinglePodcastRoute(
-      {_i13.Key? key, _i15.Podcast? podcast, required int podcastId})
+      {_i13.Key? key, _i14.Podcast? podcast, required int podcastId})
       : super(SinglePodcastRoute.name,
             path: ':podcastId',
             args: SinglePodcastRouteArgs(
@@ -331,7 +326,7 @@ class SinglePodcastRouteArgs {
 
   final _i13.Key? key;
 
-  final _i15.Podcast? podcast;
+  final _i14.Podcast? podcast;
 
   final int podcastId;
 
@@ -345,7 +340,7 @@ class SinglePodcastRouteArgs {
 /// [_i9.SingleEpisodePage]
 class SingleEpisodeRoute extends _i6.PageRouteInfo<SingleEpisodeRouteArgs> {
   SingleEpisodeRoute(
-      {_i13.Key? key, required int episodeId, _i16.Episode? episode})
+      {_i13.Key? key, required int episodeId, _i15.Episode? episode})
       : super(SingleEpisodeRoute.name,
             path: ':episodeId',
             args: SingleEpisodeRouteArgs(
@@ -363,7 +358,7 @@ class SingleEpisodeRouteArgs {
 
   final int episodeId;
 
-  final _i16.Episode? episode;
+  final _i15.Episode? episode;
 
   @override
   String toString() {

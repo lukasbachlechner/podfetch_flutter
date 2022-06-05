@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 enum ButtonType { accent, muted }
@@ -121,6 +120,7 @@ class PfButton extends StatelessWidget {
       ),
       minimumSize: MaterialStateProperty.all(Size(width, size.height)),
       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      enableFeedback: true,
     );
   }
 

@@ -1,19 +1,21 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:podfetch_api/podfetch_api.dart';
+import 'package:podfetch_flutter/providers/api_provider.dart';
 import 'package:podfetch_flutter/service_locator.dart';
 import 'package:podfetch_flutter/widgets/typography/heading.dart';
 
 import '../../widgets/base/page_wrap.dart';
 
-class SingleCategoryPage extends StatelessWidget {
+class SingleCategoryPage extends ConsumerWidget {
   const SingleCategoryPage(
       {Key? key, @PathParam('categoryId') required this.categoryId})
       : super(key: key);
   final int categoryId;
   @override
-  Widget build(BuildContext context) {
-    var allCategories = getIt<PodfetchStaticCategoriesRepository>().getAll();
+  Widget build(BuildContext context, WidgetRef ref) {
+    var allCategories = ref.watch(categoriesProvider).getAll();
     return PageWrap(
       child: SingleChildScrollView(
         child: Column(
