@@ -4,19 +4,20 @@ import 'package:podfetch_flutter/theme.dart';
 enum HeadingType { h1, h2, h3 }
 
 class Heading extends StatelessWidget {
-  const Heading(
-    this.title, {
-    Key? key,
-    this.headingType = HeadingType.h1,
-    this.inPageContainer = true,
-    this.paddingTop = 0.0,
-    this.paddingBottom = 8.0,
-  }) : super(key: key);
+  const Heading(this.title,
+      {Key? key,
+      this.headingType = HeadingType.h1,
+      this.inPageContainer = true,
+      this.paddingTop = 0.0,
+      this.paddingBottom = 8.0,
+      this.textAlign = TextAlign.left})
+      : super(key: key);
   final String title;
   final HeadingType headingType;
   final bool inPageContainer;
   final double paddingTop;
   final double paddingBottom;
+  final TextAlign textAlign;
   @override
   Widget build(BuildContext context) {
     final horizontalPadding = inPageContainer ? kPagePadding : 0.0;
@@ -27,13 +28,10 @@ class Heading extends StatelessWidget {
         top: paddingTop,
         bottom: paddingBottom,
       ),
-      child: Row(
-        children: [
-          Text(
-            title,
-            style: _getTextStyleForLevel(context),
-          ),
-        ],
+      child: Text(
+        title,
+        textAlign: textAlign,
+        style: _getTextStyleForLevel(context),
       ),
     );
   }

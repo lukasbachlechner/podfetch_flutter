@@ -84,18 +84,18 @@ class EpisodeListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        // color: Theme.of(context).primaryColor,
-        borderRadius: BorderRadius.circular(4.0),
-      ),
-      child: GestureDetector(
-        onTap: () {
-          context.navigateTo(
-            SingleEpisodeRoute(episodeId: episode.id, episode: episode),
-          );
-        },
+    return GestureDetector(
+      onTap: () {
+        context.navigateTo(
+          SingleEpisodeRoute(episodeId: episode.id, episode: episode),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: Theme.of(context).primaryColor,
+          borderRadius: BorderRadius.circular(4.0),
+        ),
         child: Column(
           children: [
             _buildHeader(),

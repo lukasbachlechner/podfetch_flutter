@@ -34,11 +34,11 @@ class HomePage extends HookConsumerWidget {
         resizeToAvoidBottomInset: false,
         extendBodyBehindAppBar: true,
         navigatorObservers: () => [HeroController()],
-        routes: const [
-          DiscoverRouter(),
-          SearchRouter(),
-          ListsRouter(),
-          SettingsRouter(),
+        routes: [
+          const DiscoverRouter(),
+          const SearchRouter(),
+          if (ref.watch(authProvider).isLoggedIn) const ListsRouter(),
+          const SettingsRouter(),
         ],
         // appBarBuilder: (_, tabsRouter) => PfAppBar(tabsRouter: tabsRouter),
         builder: (context, child, _) {

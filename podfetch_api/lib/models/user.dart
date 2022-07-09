@@ -11,9 +11,17 @@ class User implements Model {
   final List<PlayedEpisode?> playedEpisodes;
   final List<Episode?> likedEpisodes;
   final List<Podcast?> subscribedPodcasts;
+  final DateTime createdAt;
 
-  User(this.id, this.email, this.categoryPreferences, this.playedEpisodes,
-      this.likedEpisodes, this.subscribedPodcasts);
+  User(
+    this.id,
+    this.email,
+    this.categoryPreferences,
+    this.playedEpisodes,
+    this.likedEpisodes,
+    this.subscribedPodcasts,
+    this.createdAt,
+  );
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         json['id'] as int,
@@ -29,6 +37,7 @@ class User implements Model {
         ((json['subscribed_podcasts'] ?? []) as List<dynamic>)
             .map((e) => Podcast.fromJson(e))
             .toList(),
+        DateTime.parse(json['created_at']),
       );
 
   @override

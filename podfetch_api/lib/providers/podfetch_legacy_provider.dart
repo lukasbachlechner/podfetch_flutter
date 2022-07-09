@@ -45,7 +45,7 @@ abstract class PodfetchLegacyProvider implements PodfetchApiProvider {
 
   @override
   @POST('auth/logout')
-  Future<dynamic> logout();
+  Future<dynamic> logout({@Header('Authorization') String? bearerToken});
 
   @override
   @GET('auth/me')

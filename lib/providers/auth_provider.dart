@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:podfetch_api/models/user.dart';
+import 'package:podfetch_api/podfetch_api.dart';
 import 'package:podfetch_api/providers/api_provider.dart';
 import 'package:podfetch_flutter/providers/api_provider.dart';
 
@@ -61,7 +62,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
 
   Future<void> logout() async {
     try {
-      await apiProvider.logout();
+      await apiProvider.logout(bearerToken: 'Bearer ${state.token}');
       await storage.delete(key: 'api-token');
       state = AuthState(null, null);
     } on DioError catch (e) {
@@ -70,7 +71,11 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   }
 }
 
+final authApiProvider = Provider<PodfetchApiProvider>((ref) {
+  return PodfetchLegacyProvider(Dio(), baseUrl: 'http://localhost:3333/v1/');
+});
+
 final authProvider = StateNotifierProvider<AuthStateNotifier, AuthState>((ref) {
-  final podfetchApiProvider = ref.read(apiProvider);
+  final podfetchApiProvider = ref.read(authApiProvider);
   return AuthStateNotifier(AuthState(null, null), podfetchApiProvider);
 });

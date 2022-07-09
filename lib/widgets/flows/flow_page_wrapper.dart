@@ -31,8 +31,7 @@ class FlowPageWrapper extends StatelessWidget {
             elevation: 0.0,
             actions: [
               PfIconButton(
-                  onPressed: () =>
-                      context.router.root.replace(const HomeRouter()),
+                  onPressed: () => context.router.pop(),
                   icon: const Icon(BootstrapIcons.x))
             ],
           ),

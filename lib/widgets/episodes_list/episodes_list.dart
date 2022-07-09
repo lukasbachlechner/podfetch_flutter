@@ -8,6 +8,7 @@ import 'package:podfetch_flutter/providers/api_provider.dart';
 import 'package:podfetch_flutter/theme.dart';
 import 'package:podfetch_flutter/widgets/buttons/button.dart';
 import 'package:podfetch_flutter/widgets/episodes_list/episodes_list_item.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class EpisodesList extends HookConsumerWidget {
   const EpisodesList({
@@ -23,6 +24,7 @@ class EpisodesList extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final page = useState<int>(2);
     final episodesToUse = useState(episodes);
+    final scrollController = useScrollController();
 
     final episodesFetch = useMemoizedFuture<EpisodesByPodcastIdResponse>(
       () => ref
@@ -44,9 +46,8 @@ class EpisodesList extends HookConsumerWidget {
             shrinkWrap: true,
             primary: false,
             padding: EdgeInsets.zero,
-            separatorBuilder: (_, __) => const Divider(
-              height: 32.0,
-              color: Colors.white24,
+            separatorBuilder: (_, __) => const SizedBox(
+              height: 16.0,
             ),
             itemBuilder: (context, index) {
               final episode = episodesToUse.value[index];
@@ -59,12 +60,22 @@ class EpisodesList extends HookConsumerWidget {
           ),
           if (episodesFetch.snapshot.hasData &&
               episodesFetch.snapshot.data?.hasMore == true)
-            PfButton(
-              onPressed: () => page.value++,
-              isLoading: episodesFetch.snapshot.connectionState !=
-                  ConnectionState.done,
-              child: const Text('Load more'),
-            ),
+            VisibilityDetector(
+                key: ValueKey(podcastId),
+                onVisibilityChanged: (VisibilityInfo visibilityInfo) {
+                  if (visibilityInfo.visibleFraction == 1.0) {
+                    page.value++;
+                  }
+                },
+                child: const Center(
+                  child: CircularProgressIndicator(),
+                ) /* PfButton(
+                onPressed: () => page.value++,
+                isLoading: episodesFetch.snapshot.connectionState !=
+                    ConnectionState.done,
+                child: const Text('Load more'),
+              ), */
+                ),
           const SizedBox(
             height: 8.0,
           ),

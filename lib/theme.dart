@@ -36,6 +36,19 @@ final pfDefaultTheme = ThemeData(
     displayColor: white,
     bodyColor: white,
   ),
+  radioTheme: RadioThemeData(
+    fillColor: MaterialStateProperty.resolveWith((states) {
+      if (states.contains(MaterialState.selected)) {
+        return accentRed;
+      }
+
+      return white;
+    }),
+  ),
+  bottomSheetTheme: const BottomSheetThemeData(
+    backgroundColor: Colors.transparent,
+    modalBackgroundColor: Colors.transparent,
+  ),
   inputDecorationTheme: InputDecorationTheme(
     isDense: true,
     contentPadding:

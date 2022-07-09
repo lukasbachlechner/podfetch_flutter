@@ -15,6 +15,6 @@ abstract class PodfetchApiProvider {
   Future<SearchResponse> search(String query);
 
   Future<LoginResponse> login(Map<String, dynamic> json);
-  Future<dynamic> logout();
+  Future<dynamic> logout({String? bearerToken});
   Future<User> getUser({String? bearerToken});
 }

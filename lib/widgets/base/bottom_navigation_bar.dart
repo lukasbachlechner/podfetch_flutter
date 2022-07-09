@@ -1,8 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:podfetch_flutter/providers/auth_provider.dart';
 
-class PfBottomNavigationBar extends StatelessWidget {
+class PfBottomNavigationBar extends ConsumerWidget {
   const PfBottomNavigationBar({
     Key? key,
     required this.tabsRouter,
@@ -35,7 +37,7 @@ class PfBottomNavigationBar extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Theme(
       data: Theme.of(context).copyWith(
         splashColor: Colors.transparent,
@@ -58,12 +60,13 @@ class PfBottomNavigationBar extends StatelessWidget {
             activeIcon: BootstrapIcons.search,
             label: 'Search',
           ),
-          _buildItem(
-            context: context,
-            icon: BootstrapIcons.view_list,
-            activeIcon: BootstrapIcons.view_list,
-            label: 'Lists',
-          ),
+          if (ref.watch(authProvider).isLoggedIn)
+            _buildItem(
+              context: context,
+              icon: BootstrapIcons.view_list,
+              activeIcon: BootstrapIcons.view_list,
+              label: 'Lists',
+            ),
           _buildItem(
             context: context,
             icon: BootstrapIcons.gear,

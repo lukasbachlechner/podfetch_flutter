@@ -3,6 +3,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:podfetch_api/providers/api_provider.dart';
 import 'package:podfetch_flutter/providers/api_provider.dart';
+import 'package:podfetch_flutter/providers/language_provider.dart';
+import 'package:podfetch_flutter/theme.dart';
+import 'package:podfetch_flutter/widgets/auth/auth_callout.dart';
+import 'package:podfetch_flutter/widgets/page/page_header.dart';
+import 'package:podfetch_flutter/widgets/podcast_carousel/podcast_carousel.dart';
 import 'package:podfetch_flutter/widgets/typography/heading.dart';
 import 'package:podfetch_flutter/widgets/utils/spacer.dart';
 
@@ -17,6 +22,11 @@ class DiscoverPage extends HookConsumerWidget {
     PodfetchApiProvider client = ref.watch(apiProvider);
     final discoverRequestKey = useState<UniqueKey>(UniqueKey());
 
+    ref.listen(
+      languageProvider,
+      (previous, next) => discoverRequestKey.value = UniqueKey(),
+    );
+
     return PageWrap(
       title: 'Discover',
       child: RefreshIndicator(
@@ -29,21 +39,31 @@ class DiscoverPage extends HookConsumerWidget {
               parent: ClampingScrollPhysics()),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            // mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              PfSpacer.top(),
+              const PfPageHeader(
+                title: 'Discover',
+              ),
+              const SizedBox(height: 16.0),
+              const Heading(
+                'Featured',
+                headingType: HeadingType.h2,
+              ),
+              PodcastCarousel(
+                request: client.getTrending(max: 5),
+                requestKey: discoverRequestKey.value,
+              ),
+              const SizedBox(height: 16.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: kPagePadding),
+                child: AuthCallout(),
+              ),
               const Heading(
                 'Trending',
                 headingType: HeadingType.h2,
               ),
               PodcastScrollList(
                 request: client.getTrending(),
-                requestKey: discoverRequestKey.value,
-              ),
-              const SizedBox(height: 80.0),
-              PodcastScrollList(
-                request: client.getTrending(language: 'de'),
                 requestKey: discoverRequestKey.value,
               ),
               const SizedBox(height: 80.0),
