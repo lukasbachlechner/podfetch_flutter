@@ -2,15 +2,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:podfetch_flutter/hooks/use_memoized_future.dart';
-import 'package:podfetch_flutter/providers/api_provider.dart';
 import 'package:podfetch_flutter/providers/auth_provider.dart';
 import 'package:podfetch_flutter/providers/language_provider.dart';
 import 'package:podfetch_flutter/routes/router.gr.dart';
 import 'package:podfetch_flutter/theme.dart';
 import 'package:podfetch_flutter/widgets/auth/auth_callout.dart';
-import 'package:podfetch_flutter/widgets/auth/auth_info.dart';
-import 'package:podfetch_flutter/widgets/buttons/button.dart';
 import 'package:podfetch_flutter/widgets/page/page_header.dart';
 import 'package:podfetch_flutter/widgets/settings/settings_tile.dart';
 import 'package:podfetch_flutter/widgets/typography/heading.dart';
@@ -27,8 +23,8 @@ class SettingsPage extends HookConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const PfPageHeader(
-            title: 'Settings',
+          const Heading(
+            'Settings',
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -18,9 +18,14 @@ class _PodfetchLegacyProvider implements PodfetchLegacyProvider {
   String? baseUrl;
 
   @override
-  Future<List<Podcast>> getTrending({language = 'en', max = 10}) async {
+  Future<List<Podcast>> getTrending(
+      {language = 'en', max = 10, categories}) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'lang': language, r'max': max};
+    final queryParameters = <String, dynamic>{
+      r'lang': language,
+      r'max': max,
+      r'cat': categories
+    };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
@@ -155,6 +160,39 @@ class _PodfetchLegacyProvider implements PodfetchLegacyProvider {
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = User.fromJson(_result.data!);
     return value;
+  }
+
+  @override
+  Future<SubscribedPodcast> subscribeToPodcast(
+      {required podcastToSubscribe}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(podcastToSubscribe.toJson());
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<SubscribedPodcast>(
+            Options(method: 'POST', headers: _headers, extra: _extra)
+                .compose(_dio.options, 'subscriptions/subscribe',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = SubscribedPodcast.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<void> unsubscribeFromPodcast({required podcastToUnsubscribe}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(podcastToUnsubscribe.toJson());
+    await _dio.fetch<void>(_setStreamType<void>(
+        Options(method: 'DELETE', headers: _headers, extra: _extra)
+            .compose(_dio.options, 'subscriptions/unsubscribe',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    return null;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

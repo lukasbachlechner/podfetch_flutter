@@ -1,13 +1,10 @@
 import 'package:bootstrap_icons/bootstrap_icons.dart';
-import 'package:countries_utils/countries_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:podfetch_flutter/providers/language_provider.dart';
 import 'package:podfetch_flutter/services/language_service.dart';
 import 'package:podfetch_flutter/widgets/base/page_wrap.dart';
-import 'package:podfetch_flutter/widgets/page/page_header.dart';
 
 import '../theme.dart';
 import '../widgets/typography/heading.dart';
@@ -32,14 +29,11 @@ class LanguageSelectPage extends HookConsumerWidget {
     final searchFieldController = useTextEditingController();
 
     return PageWrap(
+      title: 'Language',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          PfSpacer.top(),
-          const Heading(
-            'Set language',
-            headingType: HeadingType.h2,
-          ),
+          const SizedBox(height: 16.0),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: kPagePadding),
             child: Text(

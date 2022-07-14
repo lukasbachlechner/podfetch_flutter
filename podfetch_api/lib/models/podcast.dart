@@ -27,8 +27,11 @@ class Podcast implements Model {
         json['image'] as String,
         json['language'] as String,
         (json['episodes'] as List<dynamic>)
-            .map((e) => Episode.fromJson(e as Map<String, dynamic>,
-                podcastTitle: json['title']))
+            .map((e) => Episode.fromJson(
+                  e as Map<String, dynamic>,
+                  podcastTitle: json['title'],
+                  podcastImage: json['image'],
+                ))
             .toList(),
         (json['categories'] as List<dynamic>)
             .map((e) => Category.fromJson(e as Map<String, dynamic>))

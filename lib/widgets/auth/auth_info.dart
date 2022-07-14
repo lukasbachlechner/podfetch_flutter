@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:podfetch_flutter/widgets/typography/heading.dart';
 
 import '../../providers/auth_provider.dart';
 import '../buttons/button.dart';
@@ -29,7 +28,7 @@ class AuthInfo extends ConsumerWidget {
             onPressed: () {
               authNotifier.logout();
             },
-            child: Text('Logout'),
+            child: const Text('Logout'),
           ),
         ],
       ),

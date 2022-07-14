@@ -19,6 +19,7 @@ class AccountPage extends ConsumerWidget {
       return const SizedBox.shrink();
     }
     return PageWrap(
+      title: 'Account',
       child: Column(
         children: [
           AspectRatio(
@@ -54,7 +55,7 @@ class AccountPage extends ConsumerWidget {
           ),
           SettingsTile(
             title: const Text('Logout'),
-            trailing: const Icon(BootstrapIcons.box_arrow_right),
+            trailingIcon: const Icon(BootstrapIcons.box_arrow_right),
             onTap: () => authNotifier.logout(),
           ),
         ],

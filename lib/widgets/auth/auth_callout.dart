@@ -3,8 +3,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:podfetch_flutter/providers/auth_provider.dart';
-import 'package:podfetch_flutter/routes/router.gr.dart';
-import 'package:podfetch_flutter/theme.dart';
 import 'package:podfetch_flutter/widgets/auth/forms/login_form.dart';
 import 'package:podfetch_flutter/widgets/buttons/button.dart';
 import 'package:podfetch_flutter/widgets/modal/modal_wrapper.dart';
@@ -39,8 +37,8 @@ class AuthCallout extends ConsumerWidget {
             children: [
               PfButton(
                 onPressed: () {},
-                child: const Text('Sign Up'),
                 buttonType: ButtonType.accent,
+                child: const Text('Sign Up'),
               ),
               const SizedBox(width: 8.0),
               PfButton(

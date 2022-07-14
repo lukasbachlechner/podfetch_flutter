@@ -10,6 +10,8 @@ import 'package:podfetch_flutter/widgets/buttons/icon_button.dart';
 import 'package:podfetch_flutter/widgets/categories/categories_grid.dart';
 import 'package:podfetch_flutter/widgets/page/page_header.dart';
 import 'package:podfetch_flutter/widgets/search/search_result_podcast_item.dart';
+import 'package:podfetch_flutter/widgets/typography/heading.dart';
+import 'package:podfetch_flutter/widgets/utils/page_container.dart';
 import '../widgets/base/page_wrap.dart';
 
 class SearchPage extends HookConsumerWidget {
@@ -36,8 +38,7 @@ class SearchPage extends HookConsumerWidget {
 
     if (snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
       final podcasts = snapshot.data!.podcasts;
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: kPagePadding),
+      return PageContainer(
         child: ListView.separated(
           padding: const EdgeInsets.only(top: 0),
           primary: false,
@@ -54,8 +55,7 @@ class SearchPage extends HookConsumerWidget {
       );
     }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: kPagePadding),
+    return PageContainer(
       child: ListView.separated(
         physics: const NeverScrollableScrollPhysics(),
         padding: const EdgeInsets.only(top: 0),
@@ -92,10 +92,11 @@ class SearchPage extends HookConsumerWidget {
     return PageWrap(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          const PfPageHeader(
-            title: 'Search',
+          const Heading(
+            'Search',
           ),
           Padding(
             padding: const EdgeInsets.symmetric(

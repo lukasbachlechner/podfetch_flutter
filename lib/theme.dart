@@ -36,6 +36,9 @@ final pfDefaultTheme = ThemeData(
     displayColor: white,
     bodyColor: white,
   ),
+  appBarTheme: const AppBarTheme(
+    titleTextStyle: TextStyle(fontSize: 16.0),
+  ),
   radioTheme: RadioThemeData(
     fillColor: MaterialStateProperty.resolveWith((states) {
       if (states.contains(MaterialState.selected)) {

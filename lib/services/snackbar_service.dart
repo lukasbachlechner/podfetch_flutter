@@ -11,9 +11,9 @@ class SnackbarService {
                     color: Colors.white,
                     border: Border.all(width: 2.0, color: Colors.black),
                     borderRadius: BorderRadius.circular(20)),
-                margin: EdgeInsets.fromLTRB(0, 0, 0, 75),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                margin: const EdgeInsets.fromLTRB(0, 0, 0, 75),
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
                   child: Text('Yay! A SnackBar!'),
                 ),
               ),

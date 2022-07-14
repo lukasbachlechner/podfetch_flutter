@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:podfetch_api/repositories/categories_repository.dart';
 import 'package:podfetch_flutter/providers/api_provider.dart';
 import 'package:podfetch_flutter/theme.dart';
 import 'package:podfetch_flutter/widgets/categories/categories_grid_item.dart';
 
-import '../../service_locator.dart';
 
 class CategoriesGrid extends ConsumerWidget {
   const CategoriesGrid({Key? key, this.columnCount = 2, this.aspectRatio = 1.0})

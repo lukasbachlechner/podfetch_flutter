@@ -1,10 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:podfetch_flutter/providers/auth_provider.dart';
 
-class PfBottomNavigationBar extends ConsumerWidget {
+import '../../providers/page_title_provider.dart';
+
+class PfBottomNavigationBar extends HookConsumerWidget {
   const PfBottomNavigationBar({
     Key? key,
     required this.tabsRouter,
@@ -38,6 +40,8 @@ class PfBottomNavigationBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final lastPageTitles = useState<List<String?>>(List.filled(4, null));
+    final currentPageIndex = useState(0);
     return Theme(
       data: Theme.of(context).copyWith(
         splashColor: Colors.transparent,
@@ -60,13 +64,12 @@ class PfBottomNavigationBar extends ConsumerWidget {
             activeIcon: BootstrapIcons.search,
             label: 'Search',
           ),
-          if (ref.watch(authProvider).isLoggedIn)
-            _buildItem(
-              context: context,
-              icon: BootstrapIcons.view_list,
-              activeIcon: BootstrapIcons.view_list,
-              label: 'Lists',
-            ),
+          _buildItem(
+            context: context,
+            icon: BootstrapIcons.view_list,
+            activeIcon: BootstrapIcons.view_list,
+            label: 'Lists',
+          ),
           _buildItem(
             context: context,
             icon: BootstrapIcons.gear,
@@ -75,8 +78,23 @@ class PfBottomNavigationBar extends ConsumerWidget {
           ),
         ],
         onTap: (int newIndex) {
+          currentPageIndex.value = tabsRouter.activeIndex;
+          final lastPageTitle = ref.watch(pageTitleProvider);
+
           if (tabsRouter.activeIndex != newIndex) {
             tabsRouter.setActiveIndex(newIndex);
+            lastPageTitles.value[currentPageIndex.value] =
+                lastPageTitle.isNotEmpty ? lastPageTitle : null;
+
+            ref.read(pageTitleProvider.notifier).reset();
+
+            if (lastPageTitles.value[newIndex] != null) {
+              ref
+                  .read(pageTitleProvider.notifier)
+                  .set(lastPageTitles.value[newIndex]!);
+
+              lastPageTitles.value[newIndex] = null;
+            }
           } else {
             tabsRouter.stackRouterOfIndex(newIndex)?.popUntilRoot();
             // tabsRouter.popTop();

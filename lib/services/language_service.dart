@@ -249,7 +249,12 @@ class LanguageService {
   }
 
   static Language getByIsoCode(String isoCode) {
-    return all().firstWhere((language) => language.isoCode == isoCode);
+    Language? result = all().firstWhere(
+      (language) => language.isoCode.toLowerCase() == isoCode.toLowerCase(),
+      orElse: () => const Language('', '<not specified>'),
+    );
+
+    return result;
   }
 
   static List<Language> all({bool majorOnly = false}) {
@@ -273,5 +278,39 @@ class Language {
 
   bool get isMajor {
     return isoCode.length == 2;
+  }
+
+  String get emoji {
+    final countryCode = isMajor ? isoCode : isoCode.split('-')[1];
+    return EmojiConverter.fromAlpha2CountryCode(countryCode);
+  }
+
+  String get emojiAndName {
+    return '$emoji $name';
+  }
+}
+
+class EmojiConverter {
+  // Offset value points to the unicode character needed for the emoji flag
+  static const int _offset = 127397;
+  static final int _a = 'A'.codeUnitAt(0);
+  static final int _z = 'Z'.codeUnitAt(0);
+  static const _exception =
+      FormatException('Provided code is not an alpha 2 country code.');
+
+  static String fromAlpha2CountryCode(String alpha2Code) {
+    if (alpha2Code.length != 2) throw _exception;
+
+    String formatted = alpha2Code.toUpperCase();
+    final int first = formatted.codeUnitAt(0);
+    final int second = formatted.codeUnitAt(1);
+
+    // Check that the two letters are alphabetical characters
+    if (first > _z || first < _a || second > _z || second < _a)
+      throw _exception;
+
+    // Create the emoji flag from the offset
+    return String.fromCharCode(first + _offset) +
+        String.fromCharCode(second + _offset);
   }
 }

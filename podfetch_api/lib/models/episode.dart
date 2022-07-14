@@ -21,27 +21,31 @@ class Episode implements Model {
 
   final int? playbackTime;
   final String? podcastTitle;
+  final String? podcastImage;
 
-  Episode(
-      {required this.id,
-      required this.title,
-      required this.titleSlug,
-      required this.description,
-      required this.excerpt,
-      required this.image,
-      required this.language,
-      required this.podcastId,
-      required this.explicit,
-      required this.audioUrl,
-      required this.audioType,
-      required this.audioSize,
-      required this.audioPrettySize,
-      required this.audioDuration,
-      required this.datePublished,
-      this.playbackTime,
-      this.podcastTitle});
+  Episode({
+    required this.id,
+    required this.title,
+    required this.titleSlug,
+    required this.description,
+    required this.excerpt,
+    required this.image,
+    required this.language,
+    required this.podcastId,
+    required this.explicit,
+    required this.audioUrl,
+    required this.audioType,
+    required this.audioSize,
+    required this.audioPrettySize,
+    required this.audioDuration,
+    required this.datePublished,
+    this.playbackTime,
+    this.podcastTitle,
+    this.podcastImage,
+  });
 
-  factory Episode.fromJson(Map<String, dynamic> json, {String? podcastTitle}) =>
+  factory Episode.fromJson(Map<String, dynamic> json,
+          {String? podcastTitle, String? podcastImage}) =>
       Episode(
         id: json['id'] as int,
         title: json['title'] as String,
@@ -60,6 +64,7 @@ class Episode implements Model {
         datePublished: json['datePublished'] as int,
         playbackTime: json['playbackTime'] as int?,
         podcastTitle: json['podcastTitle'] as String? ?? podcastTitle,
+        podcastImage: json['podcastImage'] as String? ?? podcastImage,
       );
 
   @override

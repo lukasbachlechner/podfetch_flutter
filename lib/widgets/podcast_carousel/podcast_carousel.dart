@@ -1,48 +1,43 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:podfetch_api/models/podcast.dart';
-import 'package:podfetch_flutter/theme.dart';
-import 'package:podfetch_flutter/widgets/page/page_header.dart';
 import 'package:podfetch_flutter/widgets/podcast_carousel/podcast_carousel_item.dart';
 
-import '../../hooks/use_memoized_future.dart';
-import '../typography/heading.dart';
-
 class PodcastCarousel extends HookWidget {
-  const PodcastCarousel({Key? key, required this.request, this.requestKey})
-      : super(key: key);
+  const PodcastCarousel({
+    Key? key,
+    this.isLoading = true,
+    this.podcasts,
+  }) : super(key: key);
 
-  final Future<List<Podcast>> request;
-  final UniqueKey? requestKey;
+  final bool isLoading;
+  final List<Podcast>? podcasts;
 
   @override
   Widget build(BuildContext context) {
-    final fetch =
-        useMemoizedFuture<List<Podcast>>(() => request, keys: [requestKey]);
     final currentPage = useState<int>(0);
 
-    final snapshot = fetch.snapshot;
-    if (snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
+    if (!isLoading && podcasts != null) {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           AspectRatio(
             aspectRatio: 2.0,
             child: PageView.builder(
-              itemCount: snapshot.data!.length,
+              itemCount: podcasts!.length,
               itemBuilder: (BuildContext context, int index) {
-                final podcast = snapshot.data![index];
+                final podcast = podcasts![index];
                 return PodcastCarouselItem(podcast: podcast);
               },
               onPageChanged: (value) => currentPage.value = value,
             ),
           ),
+          const SizedBox(height: 16.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ...List.generate(
-                snapshot.data!.length,
+                podcasts!.length,
                 (index) {
                   final isCurrentPage = index == currentPage.value;
                   return AnimatedContainer(
@@ -65,8 +60,37 @@ class PodcastCarousel extends HookWidget {
       );
     }
 
-    return const Center(
-      child: CircularProgressIndicator(),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const AspectRatio(
+          aspectRatio: 2.0,
+          child: PodcastCarouselItemSkeleton(),
+        ),
+        const SizedBox(height: 16.0),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ...List.generate(
+              5,
+              (index) {
+                final isCurrentPage = index == 0;
+                return Container(
+                  width: isCurrentPage ? 32.0 : 8.0,
+                  height: 4.0,
+                  margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                  decoration: BoxDecoration(
+                    color: isCurrentPage
+                        ? Colors.white
+                        : Colors.white.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

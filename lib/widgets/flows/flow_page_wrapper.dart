@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:podfetch_flutter/routes/router.gr.dart';
 import 'package:podfetch_flutter/theme.dart';
 import 'package:podfetch_flutter/widgets/buttons/icon_button.dart';
 import 'package:podfetch_flutter/widgets/page/page_header.dart';
@@ -62,7 +61,7 @@ class FlowPageWrapper extends StatelessWidget {
                         ),
                       ),
                     ),
-                    PfSpacer.bottom()
+                    const PfSpacer.bottom()
                   ],
                 ),
               ),

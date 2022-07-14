@@ -11,27 +11,28 @@
 // ignore_for_file: type=lint
 
 import 'package:auto_route/auto_route.dart' as _i6;
-import 'package:flutter/material.dart' as _i16;
-import 'package:podfetch_api/models/episode.dart' as _i18;
-import 'package:podfetch_api/models/podcast.dart' as _i17;
+import 'package:flutter/material.dart' as _i17;
+import 'package:podfetch_api/models/episode.dart' as _i19;
+import 'package:podfetch_api/models/podcast.dart' as _i18;
 
 import '../home_page.dart' as _i3;
-import '../pages/account_page.dart' as _i13;
+import '../pages/account_page.dart' as _i14;
+import '../pages/categories/single_category_page.dart' as _i10;
 import '../pages/discover_page.dart' as _i7;
 import '../pages/flows/login/login_page.dart' as _i2;
 import '../pages/flows/signup/email_page.dart' as _i4;
 import '../pages/flows/signup/password_page.dart' as _i5;
-import '../pages/language_select_page.dart' as _i15;
-import '../pages/lists_page.dart' as _i11;
-import '../pages/search_page.dart' as _i10;
-import '../pages/settings_page.dart' as _i12;
+import '../pages/language_select_page.dart' as _i16;
+import '../pages/lists_page.dart' as _i12;
+import '../pages/search_page.dart' as _i11;
+import '../pages/settings_page.dart' as _i13;
 import '../pages/signup_page.dart' as _i1;
 import '../pages/single_episode_page.dart' as _i9;
 import '../pages/single_podcast_page.dart' as _i8;
-import '../pages/storage_page.dart' as _i14;
+import '../pages/storage_page.dart' as _i15;
 
 class AppRouter extends _i6.RootStackRouter {
-  AppRouter([_i16.GlobalKey<_i16.NavigatorState>? navigatorKey])
+  AppRouter([_i17.GlobalKey<_i17.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
@@ -113,29 +114,39 @@ class AppRouter extends _i6.RootStackRouter {
           child: _i9.SingleEpisodePage(
               key: args.key, episodeId: args.episodeId, episode: args.episode));
     },
+    SingleCategoryRoute.name: (routeData) {
+      final pathParams = routeData.inheritedPathParams;
+      final args = routeData.argsAs<SingleCategoryRouteArgs>(
+          orElse: () => SingleCategoryRouteArgs(
+              categoryId: pathParams.getInt('categoryId')));
+      return _i6.CupertinoPageX<dynamic>(
+          routeData: routeData,
+          child: _i10.SingleCategoryPage(
+              key: args.key, categoryId: args.categoryId));
+    },
     SearchRoute.name: (routeData) {
       return _i6.CupertinoPageX<dynamic>(
-          routeData: routeData, child: const _i10.SearchPage());
+          routeData: routeData, child: const _i11.SearchPage());
     },
     ListsRoute.name: (routeData) {
       return _i6.CupertinoPageX<dynamic>(
-          routeData: routeData, child: const _i11.ListsPage());
+          routeData: routeData, child: const _i12.ListsPage());
     },
     SettingsRoute.name: (routeData) {
       return _i6.CupertinoPageX<dynamic>(
-          routeData: routeData, child: const _i12.SettingsPage());
+          routeData: routeData, child: const _i13.SettingsPage());
     },
     AccountRoute.name: (routeData) {
       return _i6.CupertinoPageX<dynamic>(
-          routeData: routeData, child: const _i13.AccountPage());
+          routeData: routeData, child: const _i14.AccountPage());
     },
     StorageRoute.name: (routeData) {
       return _i6.CupertinoPageX<dynamic>(
-          routeData: routeData, child: const _i14.StoragePage());
+          routeData: routeData, child: const _i15.StoragePage());
     },
     LanguageSelectRoute.name: (routeData) {
       return _i6.CupertinoPageX<dynamic>(
-          routeData: routeData, child: const _i15.LanguageSelectPage());
+          routeData: routeData, child: const _i16.LanguageSelectPage());
     }
   };
 
@@ -158,7 +169,9 @@ class AppRouter extends _i6.RootStackRouter {
                 _i6.RouteConfig(SinglePodcastRoute.name,
                     path: ':podcastId', parent: DiscoverRouter.name),
                 _i6.RouteConfig(SingleEpisodeRoute.name,
-                    path: ':episodeId', parent: DiscoverRouter.name)
+                    path: ':episodeId', parent: DiscoverRouter.name),
+                _i6.RouteConfig(SingleCategoryRoute.name,
+                    path: ':categoryId', parent: DiscoverRouter.name)
               ]),
           _i6.RouteConfig(SearchRouter.name,
               path: 'search',
@@ -169,7 +182,9 @@ class AppRouter extends _i6.RootStackRouter {
                 _i6.RouteConfig(SinglePodcastRoute.name,
                     path: ':podcastId', parent: SearchRouter.name),
                 _i6.RouteConfig(SingleEpisodeRoute.name,
-                    path: ':episodeId', parent: SearchRouter.name)
+                    path: ':episodeId', parent: SearchRouter.name),
+                _i6.RouteConfig(SingleCategoryRoute.name,
+                    path: ':categoryId', parent: SearchRouter.name)
               ]),
           _i6.RouteConfig(ListsRouter.name,
               path: 'lists',
@@ -207,7 +222,7 @@ class SignupRoute extends _i6.PageRouteInfo<void> {
 /// generated route for
 /// [_i2.LoginPage]
 class LoginRoute extends _i6.PageRouteInfo<LoginRouteArgs> {
-  LoginRoute({_i16.Key? key, required dynamic Function() onLogin})
+  LoginRoute({_i17.Key? key, required dynamic Function() onLogin})
       : super(LoginRoute.name,
             path: '/login', args: LoginRouteArgs(key: key, onLogin: onLogin));
 
@@ -217,7 +232,7 @@ class LoginRoute extends _i6.PageRouteInfo<LoginRouteArgs> {
 class LoginRouteArgs {
   const LoginRouteArgs({this.key, required this.onLogin});
 
-  final _i16.Key? key;
+  final _i17.Key? key;
 
   final dynamic Function() onLogin;
 
@@ -239,7 +254,7 @@ class HomeRouter extends _i6.PageRouteInfo<void> {
 /// generated route for
 /// [_i4.EmailPage]
 class EmailRoute extends _i6.PageRouteInfo<EmailRouteArgs> {
-  EmailRoute({_i16.Key? key, required dynamic Function(String) onNext})
+  EmailRoute({_i17.Key? key, required dynamic Function(String) onNext})
       : super(EmailRoute.name,
             path: 'email-page', args: EmailRouteArgs(key: key, onNext: onNext));
 
@@ -249,7 +264,7 @@ class EmailRoute extends _i6.PageRouteInfo<EmailRouteArgs> {
 class EmailRouteArgs {
   const EmailRouteArgs({this.key, required this.onNext});
 
-  final _i16.Key? key;
+  final _i17.Key? key;
 
   final dynamic Function(String) onNext;
 
@@ -262,7 +277,7 @@ class EmailRouteArgs {
 /// generated route for
 /// [_i5.PasswordPage]
 class PasswordRoute extends _i6.PageRouteInfo<PasswordRouteArgs> {
-  PasswordRoute({_i16.Key? key, required dynamic Function(String) onNext})
+  PasswordRoute({_i17.Key? key, required dynamic Function(String) onNext})
       : super(PasswordRoute.name,
             path: 'password-page',
             args: PasswordRouteArgs(key: key, onNext: onNext));
@@ -273,7 +288,7 @@ class PasswordRoute extends _i6.PageRouteInfo<PasswordRouteArgs> {
 class PasswordRouteArgs {
   const PasswordRouteArgs({this.key, required this.onNext});
 
-  final _i16.Key? key;
+  final _i17.Key? key;
 
   final dynamic Function(String) onNext;
 
@@ -331,7 +346,7 @@ class DiscoverRoute extends _i6.PageRouteInfo<void> {
 /// [_i8.SinglePodcastPage]
 class SinglePodcastRoute extends _i6.PageRouteInfo<SinglePodcastRouteArgs> {
   SinglePodcastRoute(
-      {_i16.Key? key, _i17.Podcast? podcast, required int podcastId})
+      {_i17.Key? key, _i18.Podcast? podcast, required int podcastId})
       : super(SinglePodcastRoute.name,
             path: ':podcastId',
             args: SinglePodcastRouteArgs(
@@ -345,9 +360,9 @@ class SinglePodcastRouteArgs {
   const SinglePodcastRouteArgs(
       {this.key, this.podcast, required this.podcastId});
 
-  final _i16.Key? key;
+  final _i17.Key? key;
 
-  final _i17.Podcast? podcast;
+  final _i18.Podcast? podcast;
 
   final int podcastId;
 
@@ -361,7 +376,7 @@ class SinglePodcastRouteArgs {
 /// [_i9.SingleEpisodePage]
 class SingleEpisodeRoute extends _i6.PageRouteInfo<SingleEpisodeRouteArgs> {
   SingleEpisodeRoute(
-      {_i16.Key? key, required int episodeId, _i18.Episode? episode})
+      {_i17.Key? key, required int episodeId, _i19.Episode? episode})
       : super(SingleEpisodeRoute.name,
             path: ':episodeId',
             args: SingleEpisodeRouteArgs(
@@ -375,11 +390,11 @@ class SingleEpisodeRouteArgs {
   const SingleEpisodeRouteArgs(
       {this.key, required this.episodeId, this.episode});
 
-  final _i16.Key? key;
+  final _i17.Key? key;
 
   final int episodeId;
 
-  final _i18.Episode? episode;
+  final _i19.Episode? episode;
 
   @override
   String toString() {
@@ -388,7 +403,32 @@ class SingleEpisodeRouteArgs {
 }
 
 /// generated route for
-/// [_i10.SearchPage]
+/// [_i10.SingleCategoryPage]
+class SingleCategoryRoute extends _i6.PageRouteInfo<SingleCategoryRouteArgs> {
+  SingleCategoryRoute({_i17.Key? key, required int categoryId})
+      : super(SingleCategoryRoute.name,
+            path: ':categoryId',
+            args: SingleCategoryRouteArgs(key: key, categoryId: categoryId),
+            rawPathParams: {'categoryId': categoryId});
+
+  static const String name = 'SingleCategoryRoute';
+}
+
+class SingleCategoryRouteArgs {
+  const SingleCategoryRouteArgs({this.key, required this.categoryId});
+
+  final _i17.Key? key;
+
+  final int categoryId;
+
+  @override
+  String toString() {
+    return 'SingleCategoryRouteArgs{key: $key, categoryId: $categoryId}';
+  }
+}
+
+/// generated route for
+/// [_i11.SearchPage]
 class SearchRoute extends _i6.PageRouteInfo<void> {
   const SearchRoute() : super(SearchRoute.name, path: '');
 
@@ -396,7 +436,7 @@ class SearchRoute extends _i6.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i11.ListsPage]
+/// [_i12.ListsPage]
 class ListsRoute extends _i6.PageRouteInfo<void> {
   const ListsRoute() : super(ListsRoute.name, path: '');
 
@@ -404,7 +444,7 @@ class ListsRoute extends _i6.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i12.SettingsPage]
+/// [_i13.SettingsPage]
 class SettingsRoute extends _i6.PageRouteInfo<void> {
   const SettingsRoute() : super(SettingsRoute.name, path: '');
 
@@ -412,7 +452,7 @@ class SettingsRoute extends _i6.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i13.AccountPage]
+/// [_i14.AccountPage]
 class AccountRoute extends _i6.PageRouteInfo<void> {
   const AccountRoute() : super(AccountRoute.name, path: 'account');
 
@@ -420,7 +460,7 @@ class AccountRoute extends _i6.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i14.StoragePage]
+/// [_i15.StoragePage]
 class StorageRoute extends _i6.PageRouteInfo<void> {
   const StorageRoute() : super(StorageRoute.name, path: 'storage');
 
@@ -428,7 +468,7 @@ class StorageRoute extends _i6.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i15.LanguageSelectPage]
+/// [_i16.LanguageSelectPage]
 class LanguageSelectRoute extends _i6.PageRouteInfo<void> {
   const LanguageSelectRoute()
       : super(LanguageSelectRoute.name, path: 'language-select');

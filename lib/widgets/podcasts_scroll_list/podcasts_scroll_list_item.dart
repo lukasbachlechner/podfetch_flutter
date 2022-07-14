@@ -1,17 +1,20 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:podfetch_api/models/podcast.dart';
 import 'package:podfetch_flutter/routes/router.gr.dart';
 import 'package:podfetch_flutter/widgets/skeleton/skeleton_box.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
-class PodcastsScrollListItem extends StatelessWidget {
+class PodcastsScrollListItem extends HookWidget {
   const PodcastsScrollListItem({Key? key, required this.podcast})
       : super(key: key);
   final Podcast podcast;
   @override
   Widget build(BuildContext context) {
     const double boxSize = 144.0;
+    final showImage = useState(false);
 
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
@@ -27,33 +30,26 @@ class PodcastsScrollListItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Hero(
-                tag: 'podcast-item-${podcast.id}',
-                child: Visibility(
-                  visible: true,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(4.0),
-                    child: AspectRatio(
-                      aspectRatio: 1.0,
-                      child: Container(
-                        color: Theme.of(context).primaryColor,
-                        child: CachedNetworkImage(
-                          imageUrl: podcast.safeImage,
-                          fit: BoxFit.cover,
-                          errorWidget: (context, String error, __) {
-                            return const Center(
-                              child: Icon(Icons.warning),
-                            );
-                          },
-                          placeholder: (_, __) {
-                            return Container(
-                              color: Theme.of(context).primaryColor,
-                              width: boxSize,
-                              height: boxSize,
-                            );
-                          },
-                        ),
-                      ),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(4.0),
+                child: AspectRatio(
+                  aspectRatio: 1.0,
+                  child: Container(
+                    color: Theme.of(context).primaryColor,
+                    child: CachedNetworkImage(
+                      imageUrl: podcast.safeImage,
+                      fit: BoxFit.cover,
+                      errorWidget: (context, String error, __) {
+                        return const Center(
+                          child: Icon(Icons.warning),
+                        );
+                      },
+                      placeholder: (_, __) {
+                        return const SkeletonBox(
+                          width: boxSize,
+                          height: boxSize,
+                        );
+                      },
                     ),
                   ),
                 ),

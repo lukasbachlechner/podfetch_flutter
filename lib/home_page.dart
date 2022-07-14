@@ -1,9 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:podfetch_flutter/providers/auth_provider.dart';
+import 'package:podfetch_flutter/providers/page_title_provider.dart';
 import 'package:podfetch_flutter/theme.dart';
 import 'package:podfetch_flutter/widgets/base/app_bar.dart';
 import 'package:podfetch_flutter/widgets/base/bottom_navigation_bar.dart';
@@ -12,6 +12,22 @@ import 'package:podfetch_flutter/widgets/player/play_button.dart';
 import 'package:we_slide/we_slide.dart';
 
 import 'routes/router.gr.dart';
+
+class PageTitleObserver extends AutoRouterObserver {
+  // final StateController<String> pageTitleProviderState;
+  final WidgetRef ref;
+  PageTitleObserver(this.ref) : super();
+
+  @override
+  void didPop(route, previousRoute) {
+    ref.read(pageTitleProvider.notifier).reset();
+  }
+
+  @override
+  void didPush(route, previousRoute) {
+    print(route);
+  }
+}
 
 class HomePage extends HookConsumerWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -23,6 +39,11 @@ class HomePage extends HookConsumerWidget {
         print('is not logged in anymore');
       }
     });
+
+    // final pageTitleProviderState = ref.read(pageTitleProvider.notifier);
+
+    final hasTitle = ref.watch(pageTitleProvider).isNotEmpty;
+
     return WillPopScope(
       onWillPop: () async {
         if (context.router.canPopSelfOrChildren) {
@@ -32,13 +53,12 @@ class HomePage extends HookConsumerWidget {
       },
       child: AutoTabsScaffold(
         resizeToAvoidBottomInset: false,
-        extendBodyBehindAppBar: true,
-        navigatorObservers: () => [HeroController()],
-        routes: [
-          const DiscoverRouter(),
-          const SearchRouter(),
-          if (ref.watch(authProvider).isLoggedIn) const ListsRouter(),
-          const SettingsRouter(),
+        navigatorObservers: () => [HeroController(), AutoRouteObserver()],
+        routes: const [
+          DiscoverRouter(),
+          SearchRouter(),
+          ListsRouter(),
+          SettingsRouter(),
         ],
         // appBarBuilder: (_, tabsRouter) => PfAppBar(tabsRouter: tabsRouter),
         builder: (context, child, _) {
@@ -49,6 +69,8 @@ class HomePage extends HookConsumerWidget {
 
           final double appBarHeight =
               kToolbarHeight + MediaQuery.of(context).padding.top;
+          final showAppBar = hasTitle || context.router.canPopSelfOrChildren;
+
           const double footerHeight = 120.0;
           const double panelHeaderSize = 80.0;
 
@@ -72,20 +94,21 @@ class HomePage extends HookConsumerWidget {
             panelBorderRadiusEnd: 0.0,
             overlay: true,
             parallaxOffset: 0.1,
-            appBarHeight: MediaQuery.of(context).padding.top + kToolbarHeight,
+            appBarHeight: showAppBar ? appBarHeight : 0,
+            appBar: AnimatedOpacity(
+              duration: const Duration(milliseconds: 100),
+              opacity: showAppBar ? 1 : 0,
+              child: PfAppBar(
+                tabsRouter: tabsRouter,
+              ),
+            ),
             footerHeight: footerHeight,
             backgroundColor: Theme.of(context).backgroundColor,
             controller: controller,
-            body: Stack(
-              children: [
-                child,
-                SizedBox(
-                  height: appBarHeight,
-                  child: PfAppBar(
-                    tabsRouter: tabsRouter,
-                  ),
-                ),
-              ],
+            body: SafeArea(
+              top: !showAppBar,
+              bottom: false,
+              child: child,
             ),
             panel: Container(
               color: theme.primaryColorLight,
@@ -94,9 +117,6 @@ class HomePage extends HookConsumerWidget {
             panelHeader: GestureDetector(
               onTap: () {
                 // controller.show();
-                const NotificationBar(
-                  message: 'test',
-                ).show(context);
               },
               child: Stack(
                 children: [
@@ -156,16 +176,7 @@ class HomePage extends HookConsumerWidget {
               tabsRouter: tabsRouter,
             ),
           );
-          /* return Stack(
-            children: [
-              child,
-              const PfPlayerBase(),
-            ],
-          ); */
         },
-        /* bottomNavigationBuilder: (_, tabsRouter) {
-          return PfBottomNavigationBar(tabsRouter: tabsRouter);
-        }, */
       ),
     );
   }

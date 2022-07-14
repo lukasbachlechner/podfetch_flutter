@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:podfetch_flutter/widgets/page/page_header.dart';
+import 'package:podfetch_flutter/widgets/typography/heading.dart';
 import '../widgets/base/page_wrap.dart';
 
 class ListsPage extends StatelessWidget {
@@ -11,8 +12,8 @@ class ListsPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: const [
-          PfPageHeader(
-            title: 'Lists',
+          Heading(
+            'Lists',
           ),
         ],
       ),

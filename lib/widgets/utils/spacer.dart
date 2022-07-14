@@ -7,17 +7,13 @@ class PfSpacer extends StatelessWidget {
       : super(key: key);
   final SpacerLocation location;
 
-  factory PfSpacer.top() {
-    return const PfSpacer(
-      location: SpacerLocation.top,
-    );
-  }
+  const PfSpacer.top({Key? key})
+      : location = SpacerLocation.top,
+        super(key: key);
 
-  factory PfSpacer.bottom() {
-    return const PfSpacer(
-      location: SpacerLocation.bottom,
-    );
-  }
+  const PfSpacer.bottom({Key? key})
+      : location = SpacerLocation.bottom,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -191,6 +191,10 @@ class PodfetchStaticCategoriesRepository {
         .where((category) => ids.contains(category.id))
         .toList();
   }
+
+  StaticCategory? getById(int id) {
+    return getAllFlat().firstWhere((category) => category.id == id);
+  }
 }
 
 class StaticCategory {

@@ -10,6 +10,8 @@ import 'package:podfetch_flutter/providers/api_provider.dart';
 import 'package:podfetch_flutter/theme.dart';
 import 'package:podfetch_flutter/widgets/base/page_wrap.dart';
 import 'package:podfetch_flutter/widgets/content_page/content_page.dart';
+import 'package:podfetch_flutter/widgets/utils/html.dart';
+import 'package:podfetch_flutter/widgets/utils/page_container.dart';
 import '../widgets/utils/spacer.dart';
 
 class SingleEpisodePage extends HookConsumerWidget {
@@ -22,7 +24,7 @@ class SingleEpisodePage extends HookConsumerWidget {
 
   List<Widget> _buildHeader(BuildContext context, Episode episodeToUse) {
     return [
-      PfSpacer.top(),
+      const PfSpacer.top(),
       Hero(
         tag: 'episode-item-$episodeId',
         child: CachedNetworkImage(
@@ -34,10 +36,8 @@ class SingleEpisodePage extends HookConsumerWidget {
       const SizedBox(
         height: 16.0,
       ),
-      AutoSizeText(
+      Text(
         episodeToUse.title,
-        overflow: TextOverflow.ellipsis,
-        maxLines: 2,
         textAlign: TextAlign.center,
         style: const TextStyle(
           fontSize: 20.0,
@@ -56,7 +56,7 @@ class SingleEpisodePage extends HookConsumerWidget {
         ),
       ),
       const SizedBox(
-        height: 16.0,
+        height: 32.0,
       ),
     ];
   }
@@ -69,24 +69,17 @@ class SingleEpisodePage extends HookConsumerWidget {
         episodeFetch.snapshot.connectionState == ConnectionState.done) {
       final episodeToUse = episodeFetch.snapshot.data;
       return ContentPage(
-        header: _buildHeader(context, episodeToUse!),
+        title: episodeToUse!.title,
+        header: _buildHeader(context, episodeToUse),
         onRefresh: () => episodeFetch.refresh(),
         headerImageUrl: episodeToUse.image,
         body: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: kPagePadding),
-            child: Html(
+          PageContainer(
+            child: PfHtml(
               data: episodeToUse.description,
-              style: {
-                "body": Style(
-                  margin: EdgeInsets.zero,
-                  padding: EdgeInsets.zero,
-                  lineHeight: LineHeight.number(1.2),
-                ),
-                "a": Style(color: Colors.white)
-              },
             ),
-          )
+          ),
+          const PfSpacer.bottom()
         ],
         titleBar: [Container()],
         titleKey: Key('episode-header-$episodeId'),

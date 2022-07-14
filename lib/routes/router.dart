@@ -4,6 +4,7 @@
 import 'package:auto_route/auto_route.dart';
 
 import 'package:podfetch_flutter/home_page.dart';
+import 'package:podfetch_flutter/pages/categories/single_category_page.dart';
 import 'package:podfetch_flutter/pages/discover_page.dart';
 import 'package:podfetch_flutter/pages/flows/login/login_page.dart';
 import 'package:podfetch_flutter/pages/flows/signup/email_page.dart';
@@ -23,6 +24,8 @@ const podcastRoutes = [
   AutoRoute(path: ':podcastId', page: SinglePodcastPage),
   AutoRoute(path: ':episodeId', page: SingleEpisodePage),
 ];
+
+const categoryRoute = AutoRoute(path: ':categoryId', page: SingleCategoryPage);
 
 @CupertinoAutoRouter(
   replaceInRouteName: 'Page,Route',
@@ -54,6 +57,7 @@ const podcastRoutes = [
           children: [
             AutoRoute(path: '', page: DiscoverPage),
             ...podcastRoutes,
+            categoryRoute
           ],
         ),
         AutoRoute(
@@ -63,6 +67,7 @@ const podcastRoutes = [
           children: [
             AutoRoute(path: '', page: SearchPage),
             ...podcastRoutes,
+            categoryRoute
           ],
         ),
         AutoRoute(

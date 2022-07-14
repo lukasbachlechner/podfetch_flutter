@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:podfetch_api/models/podcast.dart';
+import 'package:podfetch_api/models/subscribed_podcast.dart';
 import 'package:podfetch_api/models/user.dart';
 import 'package:podfetch_api/podfetch_api.dart';
 import 'package:podfetch_api/providers/api_provider.dart';
@@ -69,13 +71,27 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       print(e.response?.data?.toString());
     }
   }
+
+  Future<void> addSubscription(Podcast podcast) async {
+    await apiProvider.subscribeToPodcast(
+      podcastToSubscribe: SubscribedPodcast(null, podcast.id.toString()),
+    );
+    await getUser();
+  }
+
+  Future<void> removeSubscription(Podcast podcast) async {
+    await apiProvider.unsubscribeFromPodcast(
+      podcastToUnsubscribe: SubscribedPodcast(null, podcast.id.toString()),
+    );
+    await getUser();
+  }
 }
 
-final authApiProvider = Provider<PodfetchApiProvider>((ref) {
+/* final authApiProvider = Provider<PodfetchApiProvider>((ref) {
   return PodfetchLegacyProvider(Dio(), baseUrl: 'http://localhost:3333/v1/');
-});
+}); */
 
 final authProvider = StateNotifierProvider<AuthStateNotifier, AuthState>((ref) {
-  final podfetchApiProvider = ref.read(authApiProvider);
+  final podfetchApiProvider = ref.read(apiProvider);
   return AuthStateNotifier(AuthState(null, null), podfetchApiProvider);
 });

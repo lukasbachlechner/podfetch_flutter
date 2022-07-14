@@ -1,5 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:podfetch_api/repositories/categories_repository.dart';
+import 'package:podfetch_flutter/routes/router.gr.dart';
 
 class CategoriesGridItem extends StatelessWidget {
   const CategoriesGridItem(
@@ -10,6 +12,8 @@ class CategoriesGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: () =>
+          context.router.push(SingleCategoryRoute(categoryId: category.id)),
       child: Column(
         children: [
           AspectRatio(

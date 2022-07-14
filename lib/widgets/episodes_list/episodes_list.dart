@@ -6,12 +6,12 @@ import 'package:podfetch_api/responses/episodes_by_podcast_id_response.dart';
 import 'package:podfetch_flutter/hooks/use_memoized_future.dart';
 import 'package:podfetch_flutter/providers/api_provider.dart';
 import 'package:podfetch_flutter/theme.dart';
-import 'package:podfetch_flutter/widgets/buttons/button.dart';
 import 'package:podfetch_flutter/widgets/episodes_list/episodes_list_item.dart';
+import 'package:podfetch_flutter/widgets/utils/network.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-class EpisodesList extends HookConsumerWidget {
-  const EpisodesList({
+class SliverEpisodesList extends HookConsumerWidget {
+  const SliverEpisodesList({
     Key? key,
     required this.episodes,
     required this.podcastId,
@@ -24,7 +24,7 @@ class EpisodesList extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final page = useState<int>(2);
     final episodesToUse = useState(episodes);
-    final scrollController = useScrollController();
+    final hasMore = useState(true);
 
     final episodesFetch = useMemoizedFuture<EpisodesByPodcastIdResponse>(
       () => ref
@@ -33,54 +33,64 @@ class EpisodesList extends HookConsumerWidget {
       keys: [page.value],
     );
 
-    if (episodesFetch.snapshot.hasData &&
-        episodesFetch.snapshot.connectionState == ConnectionState.done) {
+    if (episodesFetch.snapshot.isReady) {
       episodesToUse.value.addAll(episodesFetch.snapshot.data!.episodes!);
+      hasMore.value = episodesFetch.snapshot.data!.hasMore as bool;
     }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: kPagePadding),
-      child: Column(
-        children: [
-          ListView.separated(
-            shrinkWrap: true,
-            primary: false,
-            padding: EdgeInsets.zero,
-            separatorBuilder: (_, __) => const SizedBox(
-              height: 16.0,
-            ),
-            itemBuilder: (context, index) {
-              final episode = episodesToUse.value[index];
-              return EpisodeListItem(episode: episode);
-            },
-            itemCount: episodesToUse.value.length,
-          ),
-          const SizedBox(
-            height: 8.0,
-          ),
-          if (episodesFetch.snapshot.hasData &&
-              episodesFetch.snapshot.data?.hasMore == true)
-            VisibilityDetector(
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          if (index == episodesToUse.value.length) {
+            return Visibility(
+              visible: hasMore.value,
+              child: VisibilityDetector(
                 key: ValueKey(podcastId),
                 onVisibilityChanged: (VisibilityInfo visibilityInfo) {
                   if (visibilityInfo.visibleFraction == 1.0) {
                     page.value++;
                   }
                 },
-                child: const Center(
-                  child: CircularProgressIndicator(),
-                ) /* PfButton(
-                onPressed: () => page.value++,
-                isLoading: episodesFetch.snapshot.connectionState !=
-                    ConnectionState.done,
-                child: const Text('Load more'),
-              ), */
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: kPagePadding,
+                    vertical: 4.0,
+                  ),
+                  child: EpisodesListItemSkeleton(),
                 ),
-          const SizedBox(
-            height: 8.0,
-          ),
-        ],
+              ),
+            );
+          }
+          final episode = episodesToUse.value[index];
+          return Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: kPagePadding,
+              vertical: 4.0,
+            ),
+            child: EpisodeListItem(episode: episode),
+          );
+        },
+        childCount: episodesToUse.value.length + 1,
       ),
+    );
+  }
+}
+
+class SliverEpisodesSkeletonList extends StatelessWidget {
+  const SliverEpisodesSkeletonList({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate((context, index) {
+        return const Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: kPagePadding,
+            vertical: 4.0,
+          ),
+          child: EpisodesListItemSkeleton(),
+        );
+      }, childCount: 10),
     );
   }
 }

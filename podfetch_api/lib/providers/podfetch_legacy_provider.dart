@@ -9,6 +9,8 @@ import 'package:podfetch_api/responses/login_response.dart';
 import 'package:podfetch_api/responses/search_response.dart';
 import 'package:retrofit/retrofit.dart';
 
+import '../models/subscribed_podcast.dart';
+
 part 'podfetch_legacy_provider.g.dart';
 
 @RestApi(baseUrl: fullBaseUrl)
@@ -18,8 +20,11 @@ abstract class PodfetchLegacyProvider implements PodfetchApiProvider {
 
   @override
   @GET('podcasts/trending')
-  Future<List<Podcast>> getTrending(
-      {@Query('lang') String? language = 'en', @Query('max') int? max = 10});
+  Future<List<Podcast>> getTrending({
+    @Query('lang') String? language = 'en',
+    @Query('max') int? max = 10,
+    @Query('cat') String? categories,
+  });
 
   @override
   @GET('podcasts/{id}')
@@ -50,4 +55,16 @@ abstract class PodfetchLegacyProvider implements PodfetchApiProvider {
   @override
   @GET('auth/me')
   Future<User> getUser({@Header('Authorization') String? bearerToken});
+
+  @override
+  @POST('subscriptions/subscribe')
+  Future<SubscribedPodcast> subscribeToPodcast({
+    @Body() required SubscribedPodcast podcastToSubscribe,
+  });
+
+  @override
+  @DELETE('subscriptions/unsubscribe')
+  Future<void> unsubscribeFromPodcast({
+    @Body() required SubscribedPodcast podcastToUnsubscribe,
+  });
 }

@@ -1,13 +1,6 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:podfetch_flutter/hooks/use_memoized_future.dart';
-import 'package:podfetch_flutter/providers/auth_provider.dart';
-import 'package:podfetch_flutter/routes/guards/auth_guard.dart';
-import 'package:podfetch_flutter/service_locator.dart';
-import 'package:socket_io_client/socket_io_client.dart';
 
 import 'routes/router.gr.dart';
 import 'theme.dart';

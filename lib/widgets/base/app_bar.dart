@@ -4,7 +4,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:podfetch_flutter/providers.dart';
 
+import '../../providers/page_title_provider.dart';
 import '../buttons/icon_button.dart';
 
 class PfAppBar extends ConsumerWidget implements PreferredSizeWidget {
@@ -21,10 +23,11 @@ class PfAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   PreferredSizeWidget build(BuildContext context, WidgetRef ref) {
+    final pageTitle = ref.watch(pageTitleProvider);
     return AppBar(
       automaticallyImplyLeading: false,
-      backgroundColor: Colors.transparent, // Theme.of(context).primaryColor,
-      elevation: 0.0,
+      backgroundColor: Theme.of(context).primaryColor,
+      title: Text(pageTitle),
       leading: tabsRouter.canPopSelfOrChildren
           ? PfIconButton(
               onPressed: () => context.router.popTop(),

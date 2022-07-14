@@ -1,8 +1,6 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import '../../theme.dart';
-import '../auth/forms/login_form.dart';
 
 class ModalWrapper extends StatelessWidget {
   const ModalWrapper({Key? key, this.title, required this.children})
