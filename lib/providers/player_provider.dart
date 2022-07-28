@@ -38,6 +38,10 @@ class AudioPlayerModel extends ChangeNotifier {
     return playerState?.playing ?? false;
   }
 
+  double get speed {
+    return player.speed;
+  }
+
   bool get isLoading {
     final processingState = playerState?.processingState;
     return processingState == ProcessingState.buffering ||
@@ -52,6 +56,9 @@ class AudioPlayerModel extends ChangeNotifier {
 
     player.positionStream.listen((currentPosition) {
       progress = currentPosition;
+      if (progress == totalDuration) {
+        player.stop();
+      }
       notifyListeners();
     });
 
@@ -86,6 +93,10 @@ class AudioPlayerModel extends ChangeNotifier {
 
   void playAudio() async {
     if (currentEpisode?.audioUrl != null) {
+      if (completion == 1.0) {
+        seek(Duration.zero);
+      }
+
       await player.play();
     }
   }
@@ -115,6 +126,11 @@ class AudioPlayerModel extends ChangeNotifier {
 
   void setVolume(double volume) {
     player.setVolume(volume);
+  }
+
+  void setSpeed(double speed) {
+    player.setSpeed(speed);
+    notifyListeners();
   }
 }
 

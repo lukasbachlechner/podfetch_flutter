@@ -12,8 +12,9 @@ class PodcastsGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.router.navigate(
-          SinglePodcastRoute(podcastId: podcast.id, podcast: podcast)),
+      onTap: () => context.router.push(
+        SinglePodcastRoute(podcastId: podcast.id, podcast: podcast),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

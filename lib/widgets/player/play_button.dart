@@ -23,6 +23,8 @@ class PlayButton extends HookConsumerWidget {
     final player = ref.watch(audioPlayerProvider);
     final isPlaying = player.isPlaying && player.currentEpisode == episode;
 
+    final iconSize = size / 3 * 2;
+
     return GestureDetector(
       onTap: () {
         if (player.currentEpisode == null || player.currentEpisode != episode) {
@@ -42,7 +44,10 @@ class PlayButton extends HookConsumerWidget {
         ),
         child: Center(
           child: isPlaying
-              ? const Icon(BootstrapIcons.pause)
+              ? Icon(
+                  BootstrapIcons.pause,
+                  size: iconSize,
+                )
               : Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -51,7 +56,7 @@ class PlayButton extends HookConsumerWidget {
                     ),
                     Icon(
                       BootstrapIcons.play_fill,
-                      size: size / 3 * 2,
+                      size: iconSize,
                     ),
                   ],
                 ),

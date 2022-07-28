@@ -4,6 +4,7 @@ import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:marquee/marquee.dart';
 import 'package:podfetch_flutter/providers/auth_provider.dart';
 import 'package:podfetch_flutter/providers/page_title_provider.dart';
 import 'package:podfetch_flutter/providers/player_provider.dart';
@@ -11,7 +12,6 @@ import 'package:podfetch_flutter/theme.dart';
 import 'package:podfetch_flutter/widgets/base/app_bar.dart';
 import 'package:podfetch_flutter/widgets/base/bottom_navigation_bar.dart';
 import 'package:podfetch_flutter/widgets/buttons/icon_button.dart';
-import 'package:podfetch_flutter/widgets/notifications/notification_bar.dart';
 import 'package:podfetch_flutter/widgets/player/play_button.dart';
 import 'package:we_slide/we_slide.dart';
 
@@ -89,7 +89,7 @@ class HomePage extends HookConsumerWidget {
           }
 
           return WeSlide(
-            parallax: true,
+            parallax: false,
             hideAppBar: true,
             hideFooter: true,
             panelMinSize: panelMinSize,
@@ -179,37 +179,58 @@ class PodcastFullPlayer extends ConsumerWidget {
                   )
                 ],
               ),
+              const SizedBox(height: 16.0),
               ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
                 child: CachedNetworkImage(
-                  imageUrl: episode?.image ?? podcast?.safeImage ?? '',
+                  imageUrl: episode.image,
                 ),
               ),
               const SizedBox(height: 48.0),
-              Text(
-                episode?.title ?? '',
-                style: theme.textTheme.displaySmall,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+              GestureDetector(
+                onTap: () {
+                  controller.hide();
+                  context.router.push(SingleEpisodeRoute(
+                    episodeId: episode.id,
+                    episode: episode,
+                  ));
+                },
+                child: Text(
+                  episode.title,
+                  style: theme.textTheme.displaySmall,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
               const SizedBox(height: 4.0),
-              Text(
-                podcast?.title ?? '',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+              GestureDetector(
+                onTap: () {
+                  controller.hide();
+                  context.router.push(SinglePodcastRoute(
+                    podcastId: podcast!.id,
+                    podcast: podcast,
+                  ));
+                },
+                child: Text(
+                  podcast?.title ?? '',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
               const SizedBox(height: 16.0),
               if (player.progress != null &&
                   player.totalDuration != null &&
                   player.buffered != null)
                 ProgressBar(
-                  baseBarColor: theme.highlightColor,
+                  baseBarColor: theme.highlightColor.withOpacity(0.4),
                   onSeek: (Duration newDuration) => player.seek(newDuration),
                   progressBarColor: theme.highlightColor,
+                  bufferedBarColor: theme.highlightColor.withOpacity(0.4),
                   thumbColor: theme.highlightColor,
                   progress: player.progress!,
                   total: player.totalDuration!,
                   buffered: player.buffered,
+                  timeLabelType: TimeLabelType.remainingTime,
                 ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -227,25 +248,7 @@ class PodcastFullPlayer extends ConsumerWidget {
                   ),
                   PfIconButton(
                     onPressed: () => player.seekTo(-15),
-                    icon: Stack(
-                      children: [
-                        Icon(
-                          BootstrapIcons.arrow_counterclockwise,
-                          size: 32,
-                        ),
-                        Positioned.fill(
-                          child: Container(
-                            color: Colors.red,
-                            child: Text(
-                              '15',
-                              style: TextStyle(
-                                fontSize: 10,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    icon: const Text('-15s'),
                   ),
                   PlayButton(
                     episode: episode,
@@ -253,17 +256,68 @@ class PodcastFullPlayer extends ConsumerWidget {
                   ),
                   PfIconButton(
                     onPressed: () => player.seekTo(15),
-                    icon: const Text('+15'),
+                    icon: const Text('+15s'),
                   ),
-                  PfIconButton(
-                    onPressed: () => player.seekTo(15),
-                    icon: const Text('1x'),
+                  GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return const PlaybackSpeedModal();
+                        },
+                      );
+                    },
+                    child: Text('${player.speed}x'),
                   ),
                 ],
               )
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class PlaybackSpeedModal extends ConsumerWidget {
+  const PlaybackSpeedModal({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    const steps = [0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0];
+    final theme = Theme.of(context);
+
+    final player = ref.watch(audioPlayerProvider);
+    return Container(
+      padding: const EdgeInsets.all(kPagePadding),
+      color: Theme.of(context).backgroundColor,
+      child: ListView.separated(
+        padding: EdgeInsets.zero,
+        itemBuilder: (context, index) {
+          final step = steps[index];
+          final isSelected = player.speed == step;
+          return Material(
+            type: MaterialType.transparency,
+            child: ListTile(
+              selected: isSelected,
+              selectedColor: Colors.white,
+              selectedTileColor: theme.primaryColor,
+              onTap: () => player.setSpeed(step),
+              title: Text(
+                '${step}x',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.white.withOpacity(isSelected ? 1.0 : 0.5),
+                ),
+              ),
+              trailing: (isSelected) ? const Icon(BootstrapIcons.check) : null,
+            ),
+          );
+        },
+        separatorBuilder: (context, index) => const SizedBox(height: 2.0),
+        itemCount: steps.length,
       ),
     );
   }
@@ -287,105 +341,115 @@ class PodcastMiniPlayer extends ConsumerWidget {
       return const SizedBox.shrink();
     }
 
-    return Container(
-      color: theme.primaryColorLight,
-      child: Stack(
-        children: [
-          /*  LinearProgressIndicator(
-            minHeight: height,
-            color: theme.highlightColor,
-            backgroundColor: Colors.transparent,
-            value: player.completion,
-          ), */
-          FractionallySizedBox(
-            widthFactor: player.completion,
-            heightFactor: 1.0,
-            child: Stack(
-              children: [
-                Container(color: theme.highlightColor.withOpacity(0.4)),
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  bottom: 0,
-                  child: Container(
-                    color: theme.highlightColor.withOpacity(0.5),
-                    width: 2.0,
-                  ),
-                )
-              ],
-            ),
-          ),
-          SizedBox(
-            height: height,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: kPagePadding),
-              child: Row(
+    return GestureDetector(
+      onTap: () => ref.watch(weSlideControllerProvider).show(),
+      child: Container(
+        color: theme.primaryColorLight,
+        child: Stack(
+          children: [
+            /*  LinearProgressIndicator(
+              minHeight: height,
+              color: theme.highlightColor,
+              backgroundColor: Colors.transparent,
+              value: player.completion,
+            ), */
+            FractionallySizedBox(
+              widthFactor: player.completion,
+              heightFactor: 1.0,
+              child: Stack(
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(4.0),
-                    child: Stack(
-                      children: [
-                        CachedNetworkImage(
-                          width: 36.0,
-                          height: 36.0,
-                          imageUrl: episode.image,
-                        ),
-                        Visibility(
-                          visible: player.isLoading,
-                          child: Positioned.fill(
-                            child: Container(
-                              color: theme.backgroundColor.withOpacity(0.8),
-                              child: const Center(
-                                child: SizedBox(
-                                  height: 16,
-                                  width: 16,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
+                  Container(color: theme.highlightColor.withOpacity(0.4)),
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    child: Container(
+                      color: theme.highlightColor.withOpacity(0.5),
+                      width: 2.0,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: height,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: kPagePadding),
+                child: Row(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(4.0),
+                      child: Stack(
+                        children: [
+                          CachedNetworkImage(
+                            width: 36.0,
+                            height: 36.0,
+                            imageUrl: episode.image,
+                          ),
+                          Visibility(
+                            visible: player.isLoading,
+                            child: Positioned.fill(
+                              child: Container(
+                                color: theme.backgroundColor.withOpacity(0.8),
+                                child: const Center(
+                                  child: SizedBox(
+                                    height: 16,
+                                    width: 16,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        )
-                      ],
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 8.0,
-                  ),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          episode.title,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          player.currentPodcast?.title ?? '',
-                          maxLines: 1,
-                          style: const TextStyle(
-                            fontSize: 12.0,
-                          ),
-                        ),
-                      ],
+                    const SizedBox(
+                      width: 8.0,
                     ),
-                  ),
-                  const SizedBox(width: 8.0),
-                  PlayButton(episode: episode),
-                ],
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          /*  SizedBox(
+                            height: 20,
+                            child: Marquee(
+                              text: episode.title,
+                              velocity: 10,
+                            ),
+                          ), */
+                          Text(
+                            episode.title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            player.currentPodcast?.title ?? '',
+                            maxLines: 1,
+                            style: const TextStyle(
+                              fontSize: 12.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 8.0),
+                    PlayButton(episode: episode),
+                  ],
+                ),
               ),
             ),
-          ),
 
-          // Text(player.progress?.inMilliseconds.toString() ?? ''),
-        ],
+            // Text(player.progress?.inMilliseconds.toString() ?? ''),
+          ],
+        ),
       ),
     );
   }
