@@ -121,7 +121,6 @@ class DiscoverPage extends HookConsumerWidget {
             );
           }, childCount: allCategories.length),
         ),
-        for (var i = 0; i < allCategories.length; i++) ...[]
       ],
     );
   }

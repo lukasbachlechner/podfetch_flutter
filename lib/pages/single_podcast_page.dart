@@ -9,6 +9,7 @@ import 'package:podfetch_api/models/podcast.dart';
 import 'package:podfetch_api/podfetch_api.dart';
 import 'package:podfetch_flutter/hooks/use_memoized_future.dart';
 import 'package:podfetch_flutter/providers/api_provider.dart';
+import 'package:podfetch_flutter/routes/router.gr.dart';
 import 'package:podfetch_flutter/services/language_service.dart';
 import 'package:podfetch_flutter/widgets/base/page_wrap.dart';
 import 'package:podfetch_flutter/widgets/buttons/button.dart';
@@ -215,6 +216,11 @@ class CategoryChipWrap extends HookWidget {
       children: categories
           .map(
             (category) => CategoryChip(
+              onTap: () => context.router.navigate(
+                SingleCategoryRoute(
+                  categoryId: category!.id,
+                ),
+              ),
               avatar: category?.iconData != null
                   ? Icon(
                       category?.iconData,

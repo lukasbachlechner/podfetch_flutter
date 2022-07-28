@@ -3,13 +3,15 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:podfetch_api/models/episode.dart';
+import 'package:podfetch_flutter/providers/player_provider.dart';
 import 'package:podfetch_flutter/routes/router.gr.dart';
 import 'package:podfetch_flutter/widgets/buttons/icon_button.dart';
 import 'package:podfetch_flutter/widgets/player/play_button.dart';
 import 'package:podfetch_flutter/widgets/skeleton/skeleton_box.dart';
 
-class EpisodeListItem extends StatelessWidget {
+class EpisodeListItem extends ConsumerWidget {
   const EpisodeListItem({Key? key, required this.episode}) : super(key: key);
   final Episode episode;
 
@@ -38,16 +40,6 @@ class EpisodeListItem extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
         ),
-        PfIconButton(
-          padding: EdgeInsets.zero,
-          maxHeight: 24.0,
-          maxWidth: 24.0,
-          onPressed: () {},
-          icon: const Icon(
-            BootstrapIcons.three_dots,
-            size: 16.0,
-          ),
-        ),
       ],
     );
   }
@@ -61,7 +53,7 @@ class EpisodeListItem extends StatelessWidget {
     );
   }
 
-  Widget _buildFooter(BuildContext context) {
+  Widget _buildFooter(BuildContext context, WidgetRef ref, Episode episode) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -79,7 +71,9 @@ class EpisodeListItem extends StatelessWidget {
         ),
         Row(
           children: [
-            PlayButton(onPressed: () {}),
+            PlayButton(
+              episode: episode,
+            ),
           ],
         )
       ],
@@ -87,7 +81,7 @@ class EpisodeListItem extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () {
         context.navigateTo(
@@ -111,7 +105,7 @@ class EpisodeListItem extends StatelessWidget {
             const SizedBox(
               height: 16.0,
             ),
-            _buildFooter(context),
+            _buildFooter(context, ref, episode),
           ],
         ),
       ),

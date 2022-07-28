@@ -58,6 +58,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       final user = await apiProvider.getUser(bearerToken: 'Bearer $token');
       state = AuthState(token, user);
     } on DioError catch (e) {
+      await storage.delete(key: 'api-token');
       print(e.response?.data?.toString());
     }
   }
