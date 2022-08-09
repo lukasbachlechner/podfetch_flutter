@@ -5,11 +5,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:podfetch_api/models/episode.dart';
-import 'package:podfetch_flutter/providers/player_provider.dart';
-import 'package:podfetch_flutter/routes/router.gr.dart';
-import 'package:podfetch_flutter/widgets/buttons/icon_button.dart';
-import 'package:podfetch_flutter/widgets/player/play_button.dart';
-import 'package:podfetch_flutter/widgets/skeleton/skeleton_box.dart';
+import '../../providers/player_provider.dart';
+import '../../routes/router.gr.dart';
+import '../buttons/icon_button.dart';
+import '../media/image.dart';
+import '../player/like_button.dart';
+import '../player/play_button.dart';
+import '../skeleton/skeleton_box.dart';
 
 class EpisodeListItem extends ConsumerWidget {
   const EpisodeListItem({Key? key, required this.episode}) : super(key: key);
@@ -20,11 +22,11 @@ class EpisodeListItem extends ConsumerWidget {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(2.0),
-          child: CachedNetworkImage(
+          child: PfImage(
             imageUrl: episode.image,
             height: 36.0,
             width: 36.0,
-            errorWidget: (context, url, error) => CachedNetworkImage(
+            errorWidget: (context, url, error) => PfImage(
               imageUrl: episode.podcastImage ?? '',
             ),
           ),
@@ -39,6 +41,13 @@ class EpisodeListItem extends ConsumerWidget {
             style: const TextStyle(fontWeight: FontWeight.bold),
             overflow: TextOverflow.ellipsis,
           ),
+        ),
+        const SizedBox(
+          width: 12.0,
+        ),
+        LikeButton(
+          episode: episode,
+          size: 16,
         ),
       ],
     );
@@ -57,7 +66,39 @@ class EpisodeListItem extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        RichText(
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          verticalDirection: VerticalDirection.up,
+          children: [
+            Text(
+              episode.datePublishedFormatted,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            Text(
+              ' \u00B7 ',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            episode.playbackTime != null
+                ? Container(
+                    width: 64,
+                    padding: const EdgeInsets.only(left: 4.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(4.0),
+                      child: LinearProgressIndicator(
+                        backgroundColor: Colors.white24,
+                        color: Theme.of(context).highlightColor,
+                        minHeight: 4.0,
+                        value: episode.playbackTimePercent,
+                      ),
+                    ),
+                  )
+                : Text(
+                    episode.audioDurationFormatted,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+          ],
+        ),
+        /*  RichText(
           text: TextSpan(
             style: Theme.of(context).textTheme.bodyMedium,
             children: [
@@ -65,10 +106,23 @@ class EpisodeListItem extends ConsumerWidget {
                 text: episode.datePublishedFormatted,
               ),
               const TextSpan(text: ' \u00B7 '),
-              TextSpan(text: episode.audioDurationFormatted),
+              episode.playbackTime != null
+                  ? WidgetSpan(
+                      baseline: TextBaseline.ideographic,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      child: Container(
+                        color: Colors.red,
+                        width: 50,
+                        child: Center(
+                          child: LinearProgressIndicator(
+                            value: 0.5,
+                          ),
+                        ),
+                      ))
+                  : TextSpan(text: episode.audioDurationFormatted),
             ],
           ),
-        ),
+        ), */
         Row(
           children: [
             PlayButton(

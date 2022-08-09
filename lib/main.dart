@@ -1,32 +1,25 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:just_audio_background/just_audio_background.dart';
+import 'package:path_provider/path_provider.dart';
+import 'providers.dart';
+import 'providers/auth_provider.dart';
+import 'providers/snackbar_provider.dart';
 
 import 'routes/router.gr.dart';
 import 'theme.dart';
 
 void main() async {
-  /* setupLocators();
-  Socket socket = io(
-    'http://localhost:3333',
-    OptionBuilder()
-        .setAuth({
-          'token':
-              'Y2wzeWM5MXY0MDAwMWV0b2E5OWsxYTNzcw.nsJ2NkogD1xoj3F5JjDrOOoXQexcAUmm9jIyVDFDd90NxNCYqzfqJQw3hYi7'
-        })
-        .setTransports(['websocket'])
-        .enableAutoConnect()
-        .build(),
+  await JustAudioBackground.init(
+    androidNotificationChannelId: 'com.lukasbachlechner.podfetch.channel.audio',
+    androidNotificationChannelName: 'Audio playback',
+    androidNotificationOngoing: true,
+    fastForwardInterval: const Duration(seconds: 15),
+    rewindInterval: const Duration(seconds: 15),
   );
-
-  socket.on('connect', (_) {
-    print('connect');
-  });
-  socket.on('event', (data) => print(data));
-  socket.on('disconnect', (_) => print('disconnect'));
-  socket.on('fromServer', (_) => print(_));
-
-  socket.connect(); */
 
   await Hive.initFlutter();
   await Hive.openBox('localSettings');
@@ -56,18 +49,20 @@ class AppWidget extends HookConsumerWidget {
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: 'Podfetch',
-        /*  routerDelegate: AutoRouterDelegate.declarative(
+        routerDelegate: AutoRouterDelegate.declarative(
           appRouter,
           routes: (_) => [
-            if (isLoggedIn)
+            if (ref.watch(authProvider).isLoggedIn)
               const HomeRouter()
             else
               LoginRoute(
-                onLogin: () {},
+                onLogin: () {
+                  return Future.value(null);
+                },
               )
           ],
-        ), */
-        routerDelegate: appRouter.delegate(),
+        ),
+        // routerDelegate: appRouter.delegate(),
         theme: pfDefaultTheme,
         routeInformationParser: appRouter.defaultRouteParser(),
       ),

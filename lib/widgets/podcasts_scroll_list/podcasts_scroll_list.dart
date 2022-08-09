@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:podfetch_api/models/podcast.dart';
-import 'package:podfetch_flutter/theme.dart';
-import 'package:podfetch_flutter/widgets/podcasts_scroll_list/podcasts_scroll_list_item.dart';
+import '../../theme.dart';
+import 'podcasts_scroll_list_item.dart';
 
 class PodcastScrollList extends HookWidget {
   const PodcastScrollList({

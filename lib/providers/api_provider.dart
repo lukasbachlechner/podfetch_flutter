@@ -1,23 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:podfetch_api/podfetch_api.dart';
-import 'package:podfetch_api/providers/api_provider.dart';
-import 'package:podfetch_flutter/providers/auth_provider.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import '../providers.dart';
 
-final apiProvider = Provider<PodfetchApiProvider>((ref) {
-  final dio = getDio();
-
-  return PodfetchLegacyProvider(dio, baseUrl: 'http://localhost:3333/v1/');
-});
-
-final categoriesProvider = Provider<PodfetchStaticCategoriesRepository>((ref) {
-  return PodfetchStaticCategoriesRepository();
-});
-
-Dio getDio() {
+Dio getDio({required ProviderRef ref}) {
   final dio = Dio();
   const storage = FlutterSecureStorage();
   dio.interceptors.add(InterceptorsWrapper(
@@ -30,16 +16,21 @@ Dio getDio() {
     },
   ));
 
-  dio.interceptors.add(PrettyDioLogger(
-    responseBody: false,
-    requestHeader: false,
-    requestBody: false,
-    request: true,
+  dio.interceptors.add(InterceptorsWrapper(
+    onRequest: (options, handler) {
+      options.queryParameters.addAll({
+        'lang': ref.watch(languageProvider).isoCode,
+      });
+      return handler.next(options);
+    },
   ));
 
-  dio.interceptors.add(DioCacheManager(
-    CacheConfig(baseUrl: 'http://localhost:3333', defaultRequestMethod: 'GET'),
-  ).interceptor);
+  /* dio.interceptors.add(PrettyDioLogger(
+    responseBody: true,
+    requestHeader: false,
+    requestBody: true,
+    request: true,
+  )); */
 
   return dio;
 }

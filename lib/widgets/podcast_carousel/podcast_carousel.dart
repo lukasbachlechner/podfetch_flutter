@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:podfetch_api/models/podcast.dart';
-import 'package:podfetch_flutter/widgets/podcast_carousel/podcast_carousel_item.dart';
+import 'podcast_carousel_item.dart';
 
 class PodcastCarousel extends HookWidget {
   const PodcastCarousel({

@@ -5,17 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:podfetch_api/providers/api_provider.dart';
-import 'package:podfetch_flutter/hooks/use_memoized_future.dart';
-import 'package:podfetch_flutter/providers/api_provider.dart';
-import 'package:podfetch_flutter/providers/language_provider.dart';
-import 'package:podfetch_flutter/routes/router.gr.dart';
-import 'package:podfetch_flutter/theme.dart';
-import 'package:podfetch_flutter/widgets/auth/auth_callout.dart';
-import 'package:podfetch_flutter/widgets/buttons/icon_button.dart';
+import '../hooks/use_memoized_future.dart';
+import '../providers.dart';
+import '../providers/api_provider.dart';
+import '../providers/auth_provider.dart';
+import '../providers/language_provider.dart';
+import '../routes/router.gr.dart';
+import '../theme.dart';
+import '../widgets/auth/auth_callout.dart';
+import '../widgets/auth/auth_guard.dart';
+import '../widgets/buttons/icon_button.dart';
 
-import 'package:podfetch_flutter/widgets/podcast_carousel/podcast_carousel.dart';
-import 'package:podfetch_flutter/widgets/typography/heading.dart';
-import 'package:podfetch_flutter/widgets/utils/spacer.dart';
+import '../widgets/podcast_carousel/podcast_carousel.dart';
+import '../widgets/typography/heading.dart';
+import '../widgets/utils/spacer.dart';
 
 import '../widgets/base/page_wrap.dart';
 import '../widgets/podcasts_scroll_list/podcasts_scroll_list.dart';
@@ -26,7 +29,7 @@ class DiscoverPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     PodfetchApiProvider client = ref.watch(apiProvider);
-    final discoverRequestKey = useState<UniqueKey>(UniqueKey());
+    final language = ref.watch(languageProvider);
 
     final allCategories = ref.watch(categoriesProvider).getAll();
 
@@ -37,6 +40,7 @@ class DiscoverPage extends HookConsumerWidget {
           client.getTrending(max: 15),
         ],
       ),
+      keys: [language.isoCode],
     );
 
     final categoriesFetch = useMemoizedFuture(
@@ -46,15 +50,11 @@ class DiscoverPage extends HookConsumerWidget {
                 client.getTrending(categories: category.id.toString()))
             .toList(),
       ),
+      keys: [language.isoCode],
     );
 
     final generalSnapshot = generalFetch.snapshot;
     final categoriesSnapshot = categoriesFetch.snapshot;
-
-    ref.listen(
-      languageProvider,
-      (previous, next) => discoverRequestKey.value = UniqueKey(),
-    );
 
     return PageWrap.refreshable(
       onRefresh: () async {

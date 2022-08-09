@@ -3,16 +3,21 @@ import 'package:auto_route/auto_route.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:marquee/marquee.dart';
-import 'package:podfetch_flutter/providers/auth_provider.dart';
-import 'package:podfetch_flutter/providers/page_title_provider.dart';
-import 'package:podfetch_flutter/providers/player_provider.dart';
-import 'package:podfetch_flutter/theme.dart';
-import 'package:podfetch_flutter/widgets/base/app_bar.dart';
-import 'package:podfetch_flutter/widgets/base/bottom_navigation_bar.dart';
-import 'package:podfetch_flutter/widgets/buttons/icon_button.dart';
-import 'package:podfetch_flutter/widgets/player/play_button.dart';
+import 'package:podfetch_flutter/providers.dart';
+import 'providers/auth_provider.dart';
+import 'providers/page_title_provider.dart';
+import 'providers/player_provider.dart';
+import 'providers/snackbar_provider.dart';
+import 'theme.dart';
+import 'widgets/base/app_bar.dart';
+import 'widgets/base/bottom_navigation_bar.dart';
+import 'widgets/buttons/icon_button.dart';
+import 'widgets/media/image.dart';
+import 'widgets/player/play_button.dart';
+import 'widgets/typography/heading.dart';
 import 'package:we_slide/we_slide.dart';
 
 import 'routes/router.gr.dart';
@@ -55,77 +60,87 @@ class HomePage extends HookConsumerWidget {
         }
         return false;
       },
-      child: AutoTabsScaffold(
-        resizeToAvoidBottomInset: false,
-        navigatorObservers: () => [HeroController(), AutoRouteObserver()],
-        routes: const [
-          DiscoverRouter(),
-          SearchRouter(),
-          ListsRouter(),
-          SettingsRouter(),
-        ],
-        // appBarBuilder: (_, tabsRouter) => PfAppBar(tabsRouter: tabsRouter),
-        builder: (context, child, _) {
-          final tabsRouter = context.tabsRouter;
-          final theme = Theme.of(context);
+      child: ScaffoldMessenger(
+        key: ref.watch(snackbarProvider).key,
+        child: AutoTabsScaffold(
+          resizeToAvoidBottomInset: false,
+          navigatorObservers: () => [HeroController(), AutoRouteObserver()],
+          routes: const [
+            DiscoverRouter(),
+            SearchRouter(),
+            ListsRouter(),
+            SettingsRouter(),
+          ],
+          // appBarBuilder: (_, tabsRouter) => PfAppBar(tabsRouter: tabsRouter),
+          builder: (context, child, _) {
+            final tabsRouter = context.tabsRouter;
+            final theme = Theme.of(context);
 
-          final showPlayer =
-              ref.watch(audioPlayerProvider).currentEpisode != null;
+            final showPlayer =
+                ref.watch(audioPlayerProvider).currentEpisode != null;
 
-          final double appBarHeight =
-              kToolbarHeight + MediaQuery.of(context).padding.top;
-          final showAppBar = hasTitle || context.router.canPopSelfOrChildren;
+            final double appBarHeight =
+                kToolbarHeight + MediaQuery.of(context).padding.top;
+            final showAppBar = hasTitle || context.router.canPopSelfOrChildren;
 
-          const double footerHeight = 120.0;
-          const double panelHeaderSize = 80.0;
+            const double footerHeight = 120.0;
+            const double panelHeaderSize = 80.0;
 
-          double panelMinSize = footerHeight + panelHeaderSize;
-          double panelMaxSize = MediaQuery.of(context).size.height;
+            double panelMinSize = footerHeight + panelHeaderSize;
+            double panelMaxSize = MediaQuery.of(context).size.height;
 
-          final controller = ref.watch(weSlideControllerProvider);
+            // final controller = ref.watch(weSlideControllerProvider);
 
-          if (!showPlayer) {
-            panelMinSize = 0;
-          }
+            final controller = WeSlideController();
 
-          return WeSlide(
-            parallax: false,
-            hideAppBar: true,
-            hideFooter: true,
-            panelMinSize: panelMinSize,
-            panelMaxSize: panelMaxSize,
-            panelBorderRadiusBegin: 0.0,
-            panelBorderRadiusEnd: 0.0,
-            overlay: true,
-            parallaxOffset: 0.1,
-            appBarHeight: showAppBar ? appBarHeight : 0,
-            appBar: AnimatedOpacity(
-              duration: const Duration(milliseconds: 100),
-              opacity: showAppBar ? 1 : 0,
-              child: PfAppBar(
+            if (!showPlayer) {
+              panelMinSize = 0;
+            }
+
+            return WeSlide(
+              parallax: false,
+              hideAppBar: true,
+              hideFooter: true,
+              panelMinSize: panelMinSize,
+              panelMaxSize: panelMaxSize,
+              panelBorderRadiusBegin: 0.0,
+              panelBorderRadiusEnd: 0.0,
+              overlay: true,
+              parallaxOffset: 0.1,
+              appBarHeight: showAppBar ? appBarHeight : 0,
+              appBar: AnimatedOpacity(
+                duration: const Duration(milliseconds: 100),
+                opacity: showAppBar ? 1 : 0,
+                child: PfAppBar(
+                  tabsRouter: tabsRouter,
+                ),
+              ),
+              footerHeight: footerHeight,
+              backgroundColor: Theme.of(context).backgroundColor,
+              controller: controller,
+              body: SafeArea(
+                top: !showAppBar,
+                bottom: false,
+                child: child,
+              ),
+              panel: PodcastFullPlayer(
+                weSlideController: controller,
+              ),
+              panelHeader: GestureDetector(
+                onTap: () {
+                  // controller.show();
+                },
+                child: PodcastMiniPlayer(
+                  height: panelHeaderSize,
+                  weSlideController: controller,
+                ),
+              ),
+              footer: PfBottomNavigationBar(
                 tabsRouter: tabsRouter,
               ),
-            ),
-            footerHeight: footerHeight,
-            backgroundColor: Theme.of(context).backgroundColor,
-            controller: controller,
-            body: SafeArea(
-              top: !showAppBar,
-              bottom: false,
-              child: child,
-            ),
-            panel: const PodcastFullPlayer(),
-            panelHeader: GestureDetector(
-              onTap: () {
-                // controller.show();
-              },
-              child: const PodcastMiniPlayer(height: panelHeaderSize),
-            ),
-            footer: PfBottomNavigationBar(
-              tabsRouter: tabsRouter,
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
@@ -134,7 +149,10 @@ class HomePage extends HookConsumerWidget {
 class PodcastFullPlayer extends ConsumerWidget {
   const PodcastFullPlayer({
     Key? key,
+    required this.weSlideController,
   }) : super(key: key);
+
+  final WeSlideController weSlideController;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -142,7 +160,6 @@ class PodcastFullPlayer extends ConsumerWidget {
     final theme = Theme.of(context);
     final episode = player.currentEpisode;
     final podcast = player.currentPodcast;
-    final controller = ref.watch(weSlideControllerProvider);
 
     if (episode == null) {
       return const SizedBox.shrink();
@@ -160,7 +177,7 @@ class PodcastFullPlayer extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   PfIconButton(
-                    onPressed: () => controller.hide(),
+                    onPressed: () => weSlideController.hide(),
                     icon: const Icon(BootstrapIcons.chevron_down),
                   ),
                   const Expanded(
@@ -182,14 +199,14 @@ class PodcastFullPlayer extends ConsumerWidget {
               const SizedBox(height: 16.0),
               ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
-                child: CachedNetworkImage(
+                child: PfImage(
                   imageUrl: episode.image,
                 ),
               ),
               const SizedBox(height: 48.0),
               GestureDetector(
                 onTap: () {
-                  controller.hide();
+                  weSlideController.hide();
                   context.router.push(SingleEpisodeRoute(
                     episodeId: episode.id,
                     episode: episode,
@@ -205,7 +222,7 @@ class PodcastFullPlayer extends ConsumerWidget {
               const SizedBox(height: 4.0),
               GestureDetector(
                 onTap: () {
-                  controller.hide();
+                  weSlideController.hide();
                   context.router.push(SinglePodcastRoute(
                     podcastId: podcast!.id,
                     podcast: podcast,
@@ -224,7 +241,7 @@ class PodcastFullPlayer extends ConsumerWidget {
                 ProgressBar(
                   baseBarColor: theme.highlightColor.withOpacity(0.4),
                   onSeek: (Duration newDuration) => player.seek(newDuration),
-                  progressBarColor: theme.highlightColor,
+                  // progressBarColor: theme.highlightColor,
                   bufferedBarColor: theme.highlightColor.withOpacity(0.4),
                   thumbColor: theme.highlightColor,
                   progress: player.progress!,
@@ -237,10 +254,10 @@ class PodcastFullPlayer extends ConsumerWidget {
                 children: [
                   PfIconButton(
                     onPressed: () {
-                      showDialog(
+                      showModalBottomSheet(
                         context: context,
                         builder: (context) {
-                          return AlertDialog();
+                          return const PlaybackVolumeModal();
                         },
                       );
                     },
@@ -323,13 +340,45 @@ class PlaybackSpeedModal extends ConsumerWidget {
   }
 }
 
+class PlaybackVolumeModal extends ConsumerWidget {
+  const PlaybackVolumeModal({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final player = ref.watch(audioPlayerProvider);
+    return Container(
+      padding: const EdgeInsets.all(kPagePadding),
+      color: Theme.of(context).backgroundColor,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Heading(
+            'Set volume',
+            headingType: HeadingType.h3,
+          ),
+          Slider(
+            value: player.volume,
+            min: 0,
+            max: 1,
+            onChanged: (newVolume) => player.setVolume(newVolume),
+          )
+        ],
+      ),
+    );
+  }
+}
+
 class PodcastMiniPlayer extends ConsumerWidget {
   const PodcastMiniPlayer({
     Key? key,
     required this.height,
+    required this.weSlideController,
   }) : super(key: key);
 
   final double height;
+  final WeSlideController weSlideController;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -342,18 +391,18 @@ class PodcastMiniPlayer extends ConsumerWidget {
     }
 
     return GestureDetector(
-      onTap: () => ref.watch(weSlideControllerProvider).show(),
+      onTap: () => weSlideController.show(),
       child: Container(
         color: theme.primaryColorLight,
         child: Stack(
           children: [
-            /*  LinearProgressIndicator(
-              minHeight: height,
+            LinearProgressIndicator(
+              minHeight: 2,
               color: theme.highlightColor,
-              backgroundColor: Colors.transparent,
+              backgroundColor: Colors.white24,
               value: player.completion,
-            ), */
-            FractionallySizedBox(
+            ),
+            /* FractionallySizedBox(
               widthFactor: player.completion,
               heightFactor: 1.0,
               child: Stack(
@@ -370,7 +419,7 @@ class PodcastMiniPlayer extends ConsumerWidget {
                   )
                 ],
               ),
-            ),
+            ), */
             SizedBox(
               height: height,
               child: Padding(
@@ -381,7 +430,7 @@ class PodcastMiniPlayer extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(4.0),
                       child: Stack(
                         children: [
-                          CachedNetworkImage(
+                          PfImage(
                             width: 36.0,
                             height: 36.0,
                             imageUrl: episode.image,

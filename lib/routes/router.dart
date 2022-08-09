@@ -2,7 +2,6 @@
 // @AdaptiveAutoRouter
 // @CustomAutoRouter
 import 'package:auto_route/auto_route.dart';
-
 import 'package:podfetch_flutter/home_page.dart';
 import 'package:podfetch_flutter/pages/categories/single_category_page.dart';
 import 'package:podfetch_flutter/pages/discover_page.dart';
@@ -10,9 +9,9 @@ import 'package:podfetch_flutter/pages/flows/login/login_page.dart';
 import 'package:podfetch_flutter/pages/flows/signup/email_page.dart';
 import 'package:podfetch_flutter/pages/language_select_page.dart';
 import 'package:podfetch_flutter/pages/lists_page.dart';
-import 'package:podfetch_flutter/pages/signup_page.dart';
 import 'package:podfetch_flutter/pages/search_page.dart';
 import 'package:podfetch_flutter/pages/settings_page.dart';
+import 'package:podfetch_flutter/pages/signup_page.dart';
 import 'package:podfetch_flutter/pages/single_episode_page.dart';
 import 'package:podfetch_flutter/pages/single_podcast_page.dart';
 import 'package:podfetch_flutter/pages/storage_page.dart';
@@ -79,6 +78,7 @@ const categoryRoute = AutoRoute(path: ':categoryId', page: SingleCategoryPage);
               path: '',
               page: ListsPage,
             ),
+            ...podcastRoutes,
           ],
         ),
         AutoRoute(

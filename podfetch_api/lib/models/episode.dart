@@ -19,7 +19,7 @@ class Episode implements Model {
   final int audioDuration;
   final int datePublished;
 
-  final int? playbackTime;
+  int? playbackTime;
   final String? podcastTitle;
   final String? podcastImage;
 
@@ -44,8 +44,11 @@ class Episode implements Model {
     this.podcastImage,
   });
 
-  factory Episode.fromJson(Map<String, dynamic> json,
-          {String? podcastTitle, String? podcastImage}) =>
+  factory Episode.fromJson(
+    Map<String, dynamic> json, {
+    String? podcastTitle,
+    String? podcastImage,
+  }) =>
       Episode(
         id: json['id'] as int,
         title: json['title'] as String,
@@ -100,5 +103,13 @@ class Episode implements Model {
     Duration duration = Duration(seconds: audioDuration);
 
     return duration.inMinutes.toString() + ' min';
+  }
+
+  double get playbackTimePercent {
+    if (playbackTime == null) {
+      return 0;
+    }
+
+    return playbackTime! / audioDuration;
   }
 }

@@ -191,7 +191,11 @@ class AppRouter extends _i6.RootStackRouter {
               parent: HomeRouter.name,
               children: [
                 _i6.RouteConfig(ListsRoute.name,
-                    path: '', parent: ListsRouter.name)
+                    path: '', parent: ListsRouter.name),
+                _i6.RouteConfig(SinglePodcastRoute.name,
+                    path: ':podcastId', parent: ListsRouter.name),
+                _i6.RouteConfig(SingleEpisodeRoute.name,
+                    path: ':episodeId', parent: ListsRouter.name)
               ]),
           _i6.RouteConfig(SettingsRouter.name,
               path: 'settings',

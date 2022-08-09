@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:podfetch_flutter/theme.dart';
+import '../../theme.dart';
 
 enum HeadingType { h1, h2, h3 }
 

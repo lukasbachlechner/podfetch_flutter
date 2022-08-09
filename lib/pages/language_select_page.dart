@@ -2,9 +2,10 @@ import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:podfetch_flutter/providers/language_provider.dart';
-import 'package:podfetch_flutter/services/language_service.dart';
-import 'package:podfetch_flutter/widgets/base/page_wrap.dart';
+import '../providers.dart';
+import '../providers/language_provider.dart';
+import '../services/language_service.dart';
+import '../widgets/base/page_wrap.dart';
 
 import '../theme.dart';
 import '../widgets/typography/heading.dart';
@@ -18,7 +19,7 @@ class LanguageSelectPage extends HookConsumerWidget {
     final searchTerm = useState<String>('');
     final currentLanguage =
         useState<String>(ref.watch(languageProvider).isoCode);
-    final languages = LanguageService.all()
+    final languages = LanguageService.all(majorOnly: true)
         .where(
           (language) => language.name.toLowerCase().contains(
                 searchTerm.value.toLowerCase(),

@@ -37,7 +37,7 @@ final pfDefaultTheme = ThemeData(
     bodyColor: white,
   ),
   appBarTheme: const AppBarTheme(
-    titleTextStyle: TextStyle(fontSize: 16.0),
+    titleTextStyle: TextStyle(fontSize: 16.0, fontFamily: 'Satoshi'),
   ),
   radioTheme: RadioThemeData(
     fillColor: MaterialStateProperty.resolveWith((states) {
@@ -51,6 +51,10 @@ final pfDefaultTheme = ThemeData(
   bottomSheetTheme: const BottomSheetThemeData(
     backgroundColor: Colors.transparent,
     modalBackgroundColor: Colors.transparent,
+  ),
+  sliderTheme: const SliderThemeData(
+    activeTrackColor: accentRed,
+    thumbColor: accentRed,
   ),
   inputDecorationTheme: InputDecorationTheme(
     isDense: true,

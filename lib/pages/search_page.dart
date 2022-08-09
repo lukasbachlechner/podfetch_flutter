@@ -3,15 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:podfetch_api/responses/search_response.dart';
-import 'package:podfetch_flutter/hooks/use_memoized_future.dart';
-import 'package:podfetch_flutter/providers/api_provider.dart';
-import 'package:podfetch_flutter/theme.dart';
-import 'package:podfetch_flutter/widgets/buttons/icon_button.dart';
-import 'package:podfetch_flutter/widgets/categories/categories_grid.dart';
-import 'package:podfetch_flutter/widgets/page/page_header.dart';
-import 'package:podfetch_flutter/widgets/search/search_result_podcast_item.dart';
-import 'package:podfetch_flutter/widgets/typography/heading.dart';
-import 'package:podfetch_flutter/widgets/utils/page_container.dart';
+import '../hooks/use_memoized_future.dart';
+import '../providers.dart';
+import '../providers/api_provider.dart';
+import '../theme.dart';
+import '../widgets/buttons/icon_button.dart';
+import '../widgets/categories/categories_grid.dart';
+import '../widgets/page/page_header.dart';
+import '../widgets/search/search_result_podcast_item.dart';
+import '../widgets/typography/heading.dart';
+import '../widgets/utils/page_container.dart';
 import '../widgets/base/page_wrap.dart';
 
 class SearchPage extends HookConsumerWidget {
@@ -107,6 +108,7 @@ class SearchPage extends HookConsumerWidget {
               onChanged: (value) => query.value = value,
               controller: textEditingController,
               focusNode: focusNode,
+              autofocus: false,
               decoration: InputDecoration(
                 prefixIcon: AnimatedSwitcher(
                   duration: const Duration(),
@@ -144,8 +146,8 @@ class SearchPage extends HookConsumerWidget {
               child: isSearchFocused.value || query.value.isNotEmpty
                   ? _showResults(searchFetch.snapshot, query.value)
                   : const CategoriesGrid(
-                      columnCount: 3,
-                      aspectRatio: 1,
+                      columnCount: 2,
+                      aspectRatio: 2 / 1,
                     ),
             ),
           ),

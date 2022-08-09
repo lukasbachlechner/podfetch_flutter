@@ -2,14 +2,15 @@ import 'package:auto_route/auto_route.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:podfetch_flutter/providers/auth_provider.dart';
-import 'package:podfetch_flutter/providers/language_provider.dart';
-import 'package:podfetch_flutter/routes/router.gr.dart';
-import 'package:podfetch_flutter/theme.dart';
-import 'package:podfetch_flutter/widgets/auth/auth_callout.dart';
-import 'package:podfetch_flutter/widgets/page/page_header.dart';
-import 'package:podfetch_flutter/widgets/settings/settings_tile.dart';
-import 'package:podfetch_flutter/widgets/typography/heading.dart';
+import '../providers.dart';
+import '../providers/auth_provider.dart';
+import '../providers/language_provider.dart';
+import '../routes/router.gr.dart';
+import '../theme.dart';
+import '../widgets/auth/auth_callout.dart';
+import '../widgets/page/page_header.dart';
+import '../widgets/settings/settings_tile.dart';
+import '../widgets/typography/heading.dart';
 import '../widgets/base/page_wrap.dart';
 
 class SettingsPage extends HookConsumerWidget {

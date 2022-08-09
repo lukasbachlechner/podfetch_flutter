@@ -5,11 +5,18 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:podfetch_api/models/episode.dart';
 import 'package:podfetch_api/models/podcast.dart';
 import 'package:podfetch_api/providers/api_provider.dart';
-import 'package:podfetch_flutter/providers/api_provider.dart';
+import 'api_provider.dart';
+import 'auth_provider.dart';
+import 'snackbar_provider.dart';
+import 'websockets_provider.dart';
+import '../services/snackbar_service.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:we_slide/we_slide.dart';
 
 class AudioPlayerModel extends ChangeNotifier {
   final PodfetchApiProvider apiProvider;
+  final WebsocketService websocketsProvider;
+  // final AuthState authProvider;
 
   Episode? currentEpisode;
   Podcast? currentPodcast;
@@ -18,10 +25,15 @@ class AudioPlayerModel extends ChangeNotifier {
   Duration? buffered;
   PlayerState? playerState;
 
+  SnackbarService? snackbarService;
+
   AudioPlayer player = AudioPlayer();
 
   AudioPlayerModel({
     required this.apiProvider,
+    required this.snackbarService,
+    required this.websocketsProvider,
+    // required this.authProvider,
   }) {
     initAudio();
   }
@@ -42,17 +54,41 @@ class AudioPlayerModel extends ChangeNotifier {
     return player.speed;
   }
 
+  double get volume {
+    return player.volume;
+  }
+
   bool get isLoading {
     final processingState = playerState?.processingState;
     return processingState == ProcessingState.buffering ||
         processingState == ProcessingState.loading;
   }
 
-  void initAudio() {
+  void initAudio() async {
+    /*  if (authProvider.isLoggedIn) {
+     
+    } */
+
+    final lastPlayedEpisode = await apiProvider.getLastPlayedEpisode();
+    if (lastPlayedEpisode.hasEpisode) {
+      prepareEpisode(lastPlayedEpisode.episode!);
+    }
+
     player.playerStateStream.listen((currentPlayerState) {
       playerState = currentPlayerState;
       notifyListeners();
     });
+
+    /* player.positionStream
+        .throttleTime(const Duration(seconds: 1))
+        .listen((currentPosition) {
+      if (currentEpisode != null) {
+        websocketsProvider.setPlaybackTime(
+          currentEpisode!,
+          currentPosition,
+        );
+      }
+    }); */
 
     player.positionStream.listen((currentPosition) {
       progress = currentPosition;
@@ -68,9 +104,7 @@ class AudioPlayerModel extends ChangeNotifier {
     });
   }
 
-  void playEpisode(
-    Episode episodeToPlay,
-  ) async {
+  void prepareEpisode(Episode episodeToPlay) async {
     currentEpisode = episodeToPlay;
     currentPodcast =
         await apiProvider.getPodcastById(currentEpisode!.podcastId);
@@ -87,8 +121,20 @@ class AudioPlayerModel extends ChangeNotifier {
           ),
         ),
       );
-      playAudio();
+
+      if (currentEpisode?.playbackTime != null) {
+        player.seek(
+          Duration(seconds: currentEpisode?.playbackTime ?? 0),
+        );
+      }
     }
+  }
+
+  void playEpisode(
+    Episode episodeToPlay,
+  ) async {
+    prepareEpisode(episodeToPlay);
+    playAudio();
   }
 
   void playAudio() async {
@@ -97,7 +143,12 @@ class AudioPlayerModel extends ChangeNotifier {
         seek(Duration.zero);
       }
 
-      await player.play();
+      try {
+        // snackbarService?.show(SnackBar(content: Text('Yay!')));
+        await player.play();
+      } catch (e) {
+        snackbarService?.show(SnackBar(content: Text('Oops :(')));
+      }
     }
   }
 
@@ -126,6 +177,7 @@ class AudioPlayerModel extends ChangeNotifier {
 
   void setVolume(double volume) {
     player.setVolume(volume);
+    notifyListeners();
   }
 
   void setSpeed(double speed) {
@@ -133,12 +185,3 @@ class AudioPlayerModel extends ChangeNotifier {
     notifyListeners();
   }
 }
-
-final audioPlayerProvider = ChangeNotifierProvider(
-  (ref) => AudioPlayerModel(
-    apiProvider: ref.read(apiProvider),
-  ),
-);
-
-final weSlideControllerProvider =
-    Provider<WeSlideController>((ref) => WeSlideController());

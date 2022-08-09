@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:podfetch_flutter/theme.dart';
+import '../../theme.dart';
 
 class PageContainer extends StatelessWidget {
   const PageContainer({

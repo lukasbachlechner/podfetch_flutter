@@ -1,23 +1,37 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:podfetch_api/models/episode.dart';
-import 'package:podfetch_flutter/hooks/use_memoized_future.dart';
-import 'package:podfetch_flutter/providers/api_provider.dart';
-import 'package:podfetch_flutter/theme.dart';
-import 'package:podfetch_flutter/widgets/base/page_wrap.dart';
-import 'package:podfetch_flutter/widgets/content_page/content_page.dart';
-import 'package:podfetch_flutter/widgets/utils/html.dart';
-import 'package:podfetch_flutter/widgets/utils/page_container.dart';
+import '../hooks/use_memoized_future.dart';
+import '../providers.dart';
+import '../providers/api_provider.dart';
+import '../routes/router.gr.dart';
+import '../theme.dart';
+import '../widgets/base/page_wrap.dart';
+import '../widgets/buttons/button.dart';
+import '../widgets/buttons/icon_button.dart';
+import '../widgets/content_page/content_page.dart';
+import '../widgets/media/image.dart';
+import '../widgets/player/download_button.dart';
+import '../widgets/player/like_button.dart';
+import '../widgets/player/play_button.dart';
+import '../widgets/podcasts_scroll_list/podcasts_scroll_list_item.dart';
+import '../widgets/settings/settings_tile.dart';
+import '../widgets/typography/heading.dart';
+import '../widgets/utils/html.dart';
+import '../widgets/utils/page_container.dart';
 import '../widgets/utils/spacer.dart';
 
 class SingleEpisodePage extends HookConsumerWidget {
-  const SingleEpisodePage(
-      {Key? key, @PathParam('episodeId') required this.episodeId, this.episode})
-      : super(key: key);
+  const SingleEpisodePage({
+    Key? key,
+    @PathParam('episodeId') required this.episodeId,
+    this.episode,
+  }) : super(key: key);
 
   final int episodeId;
   final Episode? episode;
@@ -27,7 +41,7 @@ class SingleEpisodePage extends HookConsumerWidget {
       const PfSpacer.top(),
       Hero(
         tag: 'episode-item-$episodeId',
-        child: CachedNetworkImage(
+        child: PfImage(
           imageUrl: episodeToUse.image,
           width: 200.0,
           height: 200.0,
@@ -49,6 +63,7 @@ class SingleEpisodePage extends HookConsumerWidget {
       ),
       Text(
         episodeToUse.podcastTitle!.toUpperCase(),
+        textAlign: TextAlign.center,
         style: const TextStyle(
           fontSize: 12.0,
           fontWeight: FontWeight.w400,
@@ -58,6 +73,22 @@ class SingleEpisodePage extends HookConsumerWidget {
       const SizedBox(
         height: 32.0,
       ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          PlayButton(
+            episode: episodeToUse,
+            size: 48.0,
+            background: Theme.of(context).highlightColor,
+          ),
+          /* DownloadButton(
+            episode: episodeToUse,
+          ), */
+          LikeButton(
+            episode: episodeToUse,
+          )
+        ],
+      )
     ];
   }
 
@@ -77,6 +108,50 @@ class SingleEpisodePage extends HookConsumerWidget {
           PageContainer(
             child: PfHtml(
               data: episodeToUse.description,
+            ),
+          ),
+          const SizedBox(height: 24.0),
+          const Heading(
+            'Podcast',
+            headingType: HeadingType.h3,
+          ),
+          PageContainer(
+            child: GestureDetector(
+              onTap: () {
+                context.navigateTo(
+                    SinglePodcastRoute(podcastId: episodeToUse.podcastId));
+              },
+              child: Container(
+                padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4.0),
+                  color: Theme.of(context).primaryColor,
+                ),
+                child: Row(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(4.0),
+                      child: PfImage(
+                        imageUrl:
+                            episodeToUse.podcastImage ?? episodeToUse.image,
+                        width: 32,
+                        height: 32,
+                      ),
+                    ),
+                    const SizedBox(width: 8.0),
+                    Expanded(
+                      child: Text(
+                        episodeToUse.podcastTitle ?? 'To podcast',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    ),
+                    const Icon(
+                      BootstrapIcons.box_arrow_up_right,
+                      size: 16.0,
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
           const PfSpacer.bottom()
@@ -99,7 +174,7 @@ class SingleEpisodePage extends HookConsumerWidget {
                   height: kToolbarHeight + kPagePadding,
                 ),
                 Center(
-                  child: CachedNetworkImage(
+                  child: PfImage(
                     imageUrl: episodeToUse.image,
                     width: MediaQuery.of(context).size.width * 0.5,
                   ),

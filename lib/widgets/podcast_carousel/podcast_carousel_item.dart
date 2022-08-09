@@ -2,9 +2,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:podfetch_api/models/podcast.dart';
-import 'package:podfetch_flutter/routes/router.gr.dart';
-import 'package:podfetch_flutter/theme.dart';
-import 'package:podfetch_flutter/widgets/skeleton/skeleton_box.dart';
+import '../../routes/router.gr.dart';
+import '../../theme.dart';
+import '../media/image.dart';
+import '../skeleton/skeleton_box.dart';
 
 class PodcastCarouselItem extends StatelessWidget {
   const PodcastCarouselItem({Key? key, required this.podcast})
@@ -62,7 +63,7 @@ class PodcastCarouselItem extends StatelessWidget {
                 aspectRatio: 1,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(2.0),
-                  child: CachedNetworkImage(
+                  child: PfImage(
                     imageUrl: podcast.safeImage,
                   ),
                 ),

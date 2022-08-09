@@ -5,10 +5,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:podfetch_api/models/podcast.dart';
 import 'package:podfetch_api/models/subscribed_podcast.dart';
-import 'package:podfetch_flutter/hooks/use_memoized_future.dart';
-import 'package:podfetch_flutter/providers/api_provider.dart';
-import 'package:podfetch_flutter/providers/auth_provider.dart';
-import 'package:podfetch_flutter/widgets/typography/heading.dart';
+import '../../hooks/use_memoized_future.dart';
+import '../../providers.dart';
+import '../../providers/api_provider.dart';
+import '../../providers/auth_provider.dart';
+import '../typography/heading.dart';
 
 import '../buttons/button.dart';
 import '../notifications/notification_bar.dart';

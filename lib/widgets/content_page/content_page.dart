@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:podfetch_flutter/widgets/content_page/content_page_header.dart';
-import 'package:podfetch_flutter/widgets/content_page/content_page_title_bar.dart';
+import 'content_page_header.dart';
+import 'content_page_title_bar.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../base/page_wrap.dart';

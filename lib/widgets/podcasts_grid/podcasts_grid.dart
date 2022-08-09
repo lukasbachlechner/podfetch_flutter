@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:podfetch_api/models/podcast.dart';
-import 'package:podfetch_flutter/theme.dart';
-import 'package:podfetch_flutter/widgets/podcasts_grid/podcasts_grid_item.dart';
+import '../../theme.dart';
+import 'podcasts_grid_item.dart';
 
 class SliverPodcastsGrid extends StatelessWidget {
   const SliverPodcastsGrid({Key? key, required this.podcasts})

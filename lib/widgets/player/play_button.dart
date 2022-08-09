@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:podfetch_api/models/episode.dart';
 
+import '../../providers.dart';
 import '../../providers/player_provider.dart';
 
 class PlayButton extends HookConsumerWidget {

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:podfetch_flutter/providers/auth_provider.dart';
-import 'package:podfetch_flutter/widgets/buttons/button.dart';
-import 'package:podfetch_flutter/widgets/flows/flow_page_wrapper.dart';
-import 'package:podfetch_flutter/widgets/notifications/notification_bar.dart';
+import '../../../providers.dart';
+import '../../../providers/auth_provider.dart';
+import '../../../widgets/buttons/button.dart';
+import '../../../widgets/flows/flow_page_wrapper.dart';
+import '../../../widgets/notifications/notification_bar.dart';
 
 class LoginPage extends HookConsumerWidget {
   const LoginPage({Key? key, required this.onLogin}) : super(key: key);

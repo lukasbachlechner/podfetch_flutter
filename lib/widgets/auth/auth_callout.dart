@@ -2,10 +2,11 @@ import 'package:auto_route/auto_route.dart';
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:podfetch_flutter/providers/auth_provider.dart';
-import 'package:podfetch_flutter/widgets/auth/forms/login_form.dart';
-import 'package:podfetch_flutter/widgets/buttons/button.dart';
-import 'package:podfetch_flutter/widgets/modal/modal_wrapper.dart';
+import '../../providers.dart';
+import '../../providers/auth_provider.dart';
+import 'forms/login_form.dart';
+import '../buttons/button.dart';
+import '../modal/modal_wrapper.dart';
 
 class AuthCallout extends ConsumerWidget {
   const AuthCallout({Key? key}) : super(key: key);

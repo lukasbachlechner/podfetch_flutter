@@ -1,4 +1,5 @@
 import 'package:podfetch_api/models/episode.dart';
+import 'package:podfetch_api/models/liked_episode.dart';
 import 'package:podfetch_api/models/model.dart';
 import 'package:podfetch_api/models/played_episode.dart';
 import 'package:podfetch_api/models/podcast.dart';
@@ -10,7 +11,7 @@ class User implements Model {
   final String email;
   final List<StaticCategory?> categoryPreferences;
   final List<PlayedEpisode?> playedEpisodes;
-  final List<Episode?> likedEpisodes;
+  final List<LikedEpisode?> likedEpisodes;
   final List<SubscribedPodcast?> subscribedPodcasts;
   final DateTime createdAt;
 
@@ -33,7 +34,7 @@ class User implements Model {
             .map((e) => PlayedEpisode.fromJson(e))
             .toList(),
         ((json['likedEpisodes'] ?? []) as List<dynamic>)
-            .map((e) => Episode.fromJson(e))
+            .map((e) => LikedEpisode.fromJson(e))
             .toList(),
         ((json['subscribedPodcasts'] ?? []) as List<dynamic>)
             .map((e) => SubscribedPodcast.fromJson(e))

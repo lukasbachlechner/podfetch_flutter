@@ -7,21 +7,23 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:podfetch_api/models/podcast.dart';
 import 'package:podfetch_api/podfetch_api.dart';
-import 'package:podfetch_flutter/hooks/use_memoized_future.dart';
-import 'package:podfetch_flutter/providers/api_provider.dart';
-import 'package:podfetch_flutter/routes/router.gr.dart';
-import 'package:podfetch_flutter/services/language_service.dart';
-import 'package:podfetch_flutter/widgets/base/page_wrap.dart';
-import 'package:podfetch_flutter/widgets/buttons/button.dart';
-import 'package:podfetch_flutter/widgets/categories/category_chip.dart';
-import 'package:podfetch_flutter/widgets/content_page/content_page.dart';
-import 'package:podfetch_flutter/widgets/episodes_list/episodes_list.dart';
-import 'package:podfetch_flutter/widgets/podcast/podcast_subscribe_button.dart';
-import 'package:podfetch_flutter/widgets/typography/heading.dart';
-import 'package:podfetch_flutter/widgets/utils/html.dart';
-import 'package:podfetch_flutter/widgets/utils/network.dart';
-import 'package:podfetch_flutter/widgets/utils/page_container.dart';
-import 'package:podfetch_flutter/widgets/utils/spacer.dart';
+import '../hooks/use_memoized_future.dart';
+import '../providers.dart';
+import '../providers/api_provider.dart';
+import '../routes/router.gr.dart';
+import '../services/language_service.dart';
+import '../widgets/base/page_wrap.dart';
+import '../widgets/buttons/button.dart';
+import '../widgets/categories/category_chip.dart';
+import '../widgets/content_page/content_page.dart';
+import '../widgets/episodes_list/episodes_list.dart';
+import '../widgets/media/image.dart';
+import '../widgets/podcast/podcast_subscribe_button.dart';
+import '../widgets/typography/heading.dart';
+import '../widgets/utils/html.dart';
+import '../widgets/utils/network.dart';
+import '../widgets/utils/page_container.dart';
+import '../widgets/utils/spacer.dart';
 
 class SinglePodcastPage extends HookConsumerWidget {
   const SinglePodcastPage({
@@ -37,7 +39,7 @@ class SinglePodcastPage extends HookConsumerWidget {
       List<StaticCategory?> staticCategories, Podcast podcastToUse) {
     return [
       const PfSpacer.top(),
-      CachedNetworkImage(
+      PfImage(
         imageUrl: podcastToUse.safeImage,
         width: 200.0,
         height: 200.0,
@@ -60,6 +62,7 @@ class SinglePodcastPage extends HookConsumerWidget {
       ),
       Text(
         podcastToUse.author.toUpperCase(),
+        textAlign: TextAlign.center,
         style: const TextStyle(
           fontSize: 12.0,
           fontWeight: FontWeight.w400,
@@ -104,7 +107,7 @@ class SinglePodcastPage extends HookConsumerWidget {
           ),
           SliverAppBar(
             automaticallyImplyLeading: false,
-            toolbarHeight: 0,
+            // toolbarHeight: 0,
             pinned: true,
             backgroundColor: Theme.of(context).primaryColorDark,
             flexibleSpace: PageContainer(
@@ -113,8 +116,14 @@ class SinglePodcastPage extends HookConsumerWidget {
                 indicatorColor: Theme.of(context).highlightColor,
                 controller: tabController,
                 tabs: const [
-                  Tab(text: 'Episodes'),
-                  Tab(text: 'Info'),
+                  Tab(
+                    text: 'Episodes',
+                    height: 48,
+                  ),
+                  Tab(
+                    text: 'Info',
+                    height: 48,
+                  ),
                 ],
               ),
             ),

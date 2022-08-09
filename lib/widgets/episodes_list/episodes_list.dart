@@ -3,11 +3,12 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:podfetch_api/models/episode.dart';
 import 'package:podfetch_api/responses/episodes_by_podcast_id_response.dart';
-import 'package:podfetch_flutter/hooks/use_memoized_future.dart';
-import 'package:podfetch_flutter/providers/api_provider.dart';
-import 'package:podfetch_flutter/theme.dart';
-import 'package:podfetch_flutter/widgets/episodes_list/episodes_list_item.dart';
-import 'package:podfetch_flutter/widgets/utils/network.dart';
+import '../../hooks/use_memoized_future.dart';
+import '../../providers.dart';
+import '../../providers/api_provider.dart';
+import '../../theme.dart';
+import 'episodes_list_item.dart';
+import '../utils/network.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class SliverEpisodesList extends HookConsumerWidget {

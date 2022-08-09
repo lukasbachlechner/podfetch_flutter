@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../providers.dart';
 import '../../providers/page_title_provider.dart';
 
 class PfBottomNavigationBar extends HookConsumerWidget {

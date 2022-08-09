@@ -1,10 +1,13 @@
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:podfetch_flutter/widgets/base/page_wrap.dart';
-import 'package:podfetch_flutter/widgets/settings/settings_tile.dart';
-import 'package:podfetch_flutter/widgets/typography/heading.dart';
+import '../providers/page_title_provider.dart';
+import '../providers/player_provider.dart';
+import '../widgets/base/page_wrap.dart';
+import '../widgets/settings/settings_tile.dart';
+import '../widgets/typography/heading.dart';
 
+import '../providers.dart';
 import '../providers/auth_provider.dart';
 import '../utils.dart';
 
@@ -56,7 +59,13 @@ class AccountPage extends ConsumerWidget {
           SettingsTile(
             title: const Text('Logout'),
             trailingIcon: const Icon(BootstrapIcons.box_arrow_right),
-            onTap: () => authNotifier.logout(),
+            onTap: () async {
+              await ref.watch(audioPlayerProvider).player.stop();
+              await ref.watch(audioPlayerProvider).player.dispose();
+              ref.watch(pageTitleProvider.notifier).reset();
+
+              await authNotifier.logout();
+            },
           ),
         ],
       ),

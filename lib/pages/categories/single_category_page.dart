@@ -5,12 +5,13 @@ import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:podfetch_api/models/podcast.dart';
 import 'package:podfetch_api/providers/api_provider.dart';
-import 'package:podfetch_flutter/hooks/use_memoized_future.dart';
-import 'package:podfetch_flutter/providers/api_provider.dart';
-import 'package:podfetch_flutter/widgets/podcasts_grid/podcasts_grid.dart';
-import 'package:podfetch_flutter/widgets/typography/heading.dart';
-import 'package:podfetch_flutter/widgets/utils/network.dart';
-import 'package:podfetch_flutter/widgets/utils/spacer.dart';
+import '../../hooks/use_memoized_future.dart';
+import '../../providers.dart';
+import '../../providers/api_provider.dart';
+import '../../widgets/podcasts_grid/podcasts_grid.dart';
+import '../../widgets/typography/heading.dart';
+import '../../widgets/utils/network.dart';
+import '../../widgets/utils/spacer.dart';
 
 import '../../widgets/base/page_wrap.dart';
 

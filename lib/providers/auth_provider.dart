@@ -1,12 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:podfetch_api/models/episode.dart';
+import 'package:podfetch_api/models/liked_episode.dart';
 import 'package:podfetch_api/models/podcast.dart';
 import 'package:podfetch_api/models/subscribed_podcast.dart';
 import 'package:podfetch_api/models/user.dart';
 import 'package:podfetch_api/podfetch_api.dart';
 import 'package:podfetch_api/providers/api_provider.dart';
-import 'package:podfetch_flutter/providers/api_provider.dart';
+import 'api_provider.dart';
 
 class AuthState {
   final String? token;
@@ -88,11 +90,38 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   }
 }
 
-/* final authApiProvider = Provider<PodfetchApiProvider>((ref) {
-  return PodfetchLegacyProvider(Dio(), baseUrl: 'http://localhost:3333/v1/');
-}); */
+class LikedEpisodesState {
+  final List<LikedEpisode?> episodes;
+  const LikedEpisodesState(this.episodes);
 
-final authProvider = StateNotifierProvider<AuthStateNotifier, AuthState>((ref) {
-  final podfetchApiProvider = ref.read(apiProvider);
-  return AuthStateNotifier(AuthState(null, null), podfetchApiProvider);
-});
+  bool isEpisodeLiked(Episode episode) {
+    return episodes.isNotEmpty &&
+        episodes
+            .where((likedEpisode) =>
+                likedEpisode?.episodeId == episode.id.toString())
+            .isNotEmpty;
+  }
+}
+
+class LikedEpisodesNotifier extends StateNotifier<LikedEpisodesState> {
+  final PodfetchApiProvider apiProvider;
+
+  LikedEpisodesNotifier(LikedEpisodesState state, this.apiProvider)
+      : super(state);
+
+  Future<void> likeEpisode(Episode episode) async {
+    final likedEpisode = await apiProvider.likeEpisode(
+        episode: LikedEpisode(null, episode.id.toString(), null));
+    final newState = [...state.episodes, likedEpisode];
+    state = LikedEpisodesState(newState);
+  }
+
+  Future<void> unlikeEpisode(Episode episode) async {
+    await apiProvider.unlikeEpisode(
+        episode: LikedEpisode(null, episode.id.toString(), null));
+    final newState = [...state.episodes];
+    newState.removeWhere(
+        (likedEpisode) => likedEpisode?.episodeId == episode.id.toString());
+    state = LikedEpisodesState(newState);
+  }
+}

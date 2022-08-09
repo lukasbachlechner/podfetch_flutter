@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:podfetch_flutter/theme.dart';
-import 'package:podfetch_flutter/widgets/typography/heading.dart';
+import '../../theme.dart';
+import '../typography/heading.dart';
 
 class PfPageHeader extends StatelessWidget {
   const PfPageHeader({Key? key, this.title, this.actions}) : super(key: key);

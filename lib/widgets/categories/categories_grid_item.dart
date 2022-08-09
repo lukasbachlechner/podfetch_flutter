@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:podfetch_api/repositories/categories_repository.dart';
-import 'package:podfetch_flutter/routes/router.gr.dart';
+import '../../routes/router.gr.dart';
 
 class CategoriesGridItem extends StatelessWidget {
   const CategoriesGridItem(
@@ -21,21 +21,33 @@ class CategoriesGridItem extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8.0),
-                color: Theme.of(context).primaryColor,
+                gradient: LinearGradient(
+                  begin: Alignment.bottomLeft,
+                  end: Alignment.topRight,
+                  colors: [
+                    Theme.of(context).primaryColor,
+                    Theme.of(context).primaryColorLight
+                  ],
+                ),
               ),
               child: Center(
-                child: Icon(
-                  category.iconData,
-                  size: 32.0,
-                  color: Colors.white,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      category.iconData,
+                      size: 24.0,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(
+                      height: 8.0,
+                    ),
+                    Text(category.title),
+                  ],
                 ),
               ),
             ),
           ),
-          const SizedBox(
-            height: 4.0,
-          ),
-          Text(category.title),
         ],
       ),
     );

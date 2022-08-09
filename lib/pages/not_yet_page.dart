@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:podfetch_flutter/widgets/page/page_header.dart';
+import '../widgets/page/page_header.dart';
 import '../widgets/base/page_wrap.dart';
 
 class NotYetPage extends StatelessWidget {

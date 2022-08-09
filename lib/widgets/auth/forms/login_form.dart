@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:podfetch_flutter/providers/auth_provider.dart';
-import 'package:podfetch_flutter/widgets/buttons/button.dart';
-import 'package:podfetch_flutter/widgets/notifications/notification_bar.dart';
+import '../../../providers.dart';
+import '../../../providers/auth_provider.dart';
+import '../../buttons/button.dart';
+import '../../notifications/notification_bar.dart';
 
 class LoginForm extends HookConsumerWidget {
   const LoginForm({Key? key, required this.onLogin}) : super(key: key);

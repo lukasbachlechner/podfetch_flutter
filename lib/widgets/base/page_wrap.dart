@@ -3,7 +3,8 @@ import 'package:flutter/cupertino.dart' as cupertino;
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:podfetch_flutter/providers/page_title_provider.dart';
+import '../../providers.dart';
+import '../../providers/page_title_provider.dart';
 
 /* class PageWrap extends HookConsumerWidget {
   const PageWrap({
@@ -57,9 +58,10 @@ class PageWrap extends ConsumerStatefulWidget {
   const PageWrap({
     Key? key,
     this.title,
-    required this.child,
+    this.useSlivers = false,
+    this.child,
+    this.children,
   })  : _refreshable = false,
-        children = null,
         onRefresh = null,
         super(key: key);
 
@@ -69,10 +71,12 @@ class PageWrap extends ConsumerStatefulWidget {
     this.onRefresh,
     this.title,
   })  : _refreshable = true,
+        useSlivers = true,
         child = null,
         super(key: key);
 
   final bool _refreshable;
+  final bool useSlivers;
   final cupertino.RefreshCallback? onRefresh;
   final String? title;
   final Widget? child;
@@ -110,10 +114,11 @@ class _PageWrapState extends ConsumerState<PageWrap>
 
   @override
   Widget build(BuildContext context) {
-    if (widget._refreshable) {
+    if (widget._refreshable || widget.useSlivers) {
       return Container(
         color: Theme.of(context).backgroundColor,
         child: CustomScrollView(
+          physics: const cupertino.BouncingScrollPhysics(),
           slivers: [
             if (widget.onRefresh != null)
               cupertino.CupertinoSliverRefreshControl(

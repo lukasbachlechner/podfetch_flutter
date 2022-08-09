@@ -1,6 +1,8 @@
 import 'package:podfetch_api/models/episode.dart';
+import 'package:podfetch_api/models/liked_episode.dart';
 import 'package:podfetch_api/models/podcast.dart';
 import 'package:podfetch_api/models/subscribed_podcast.dart';
+import 'package:podfetch_api/responses/last_played_response.dart';
 import 'package:podfetch_api/responses/login_response.dart';
 import 'package:podfetch_api/responses/search_response.dart';
 
@@ -14,6 +16,10 @@ abstract class PodfetchApiProvider {
   Future<EpisodesByPodcastIdResponse> getEpisodesByPodcastId(int id,
       {int? page = 1, int? perPage = 10});
   Future<Episode> getEpisodeById(int id);
+
+  Future<LastPlayedResponse> getLastPlayedEpisode();
+  Future<List<Episode?>> getLikedEpisodes();
+
   Future<SearchResponse> search(String query);
 
   Future<LoginResponse> login(Map<String, dynamic> json);
@@ -27,4 +33,7 @@ abstract class PodfetchApiProvider {
   Future<void> unsubscribeFromPodcast({
     required SubscribedPodcast podcastToUnsubscribe,
   });
+
+  Future<LikedEpisode> likeEpisode({required LikedEpisode episode});
+  Future<void> unlikeEpisode({required LikedEpisode episode});
 }

@@ -1,10 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:podfetch_api/constants.dart';
 import 'package:podfetch_api/models/episode.dart';
+import 'package:podfetch_api/models/liked_episode.dart';
 import 'package:podfetch_api/models/podcast.dart';
 import 'package:podfetch_api/models/user.dart';
 import 'package:podfetch_api/providers/api_provider.dart';
 import 'package:podfetch_api/responses/episodes_by_podcast_id_response.dart';
+import 'package:podfetch_api/responses/last_played_response.dart';
 import 'package:podfetch_api/responses/login_response.dart';
 import 'package:podfetch_api/responses/search_response.dart';
 import 'package:retrofit/retrofit.dart';
@@ -66,5 +68,25 @@ abstract class PodfetchLegacyProvider implements PodfetchApiProvider {
   @DELETE('subscriptions/unsubscribe')
   Future<void> unsubscribeFromPodcast({
     @Body() required SubscribedPodcast podcastToUnsubscribe,
+  });
+
+  @override
+  @GET('user/last-playback-no-empty')
+  Future<LastPlayedResponse> getLastPlayedEpisode();
+
+  @override
+  @GET('user/liked')
+  Future<List<Episode?>> getLikedEpisodes();
+
+  @override
+  @POST('likes/like')
+  Future<LikedEpisode> likeEpisode({
+    @Body() required LikedEpisode episode,
+  });
+
+  @override
+  @DELETE('likes/unlike')
+  Future<void> unlikeEpisode({
+    @Body() required LikedEpisode episode,
   });
 }
