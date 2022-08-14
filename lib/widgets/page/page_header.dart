@@ -14,9 +14,11 @@ class PfPageHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Heading(
-            title ?? '',
-            inPageContainer: false,
+          Expanded(
+            child: Heading(
+              title ?? '',
+              inPageContainer: false,
+            ),
           ),
           Row(
             children: [if (actions != null) ...actions!],

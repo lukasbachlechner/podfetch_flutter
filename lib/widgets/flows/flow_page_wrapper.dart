@@ -25,24 +25,26 @@ class FlowPageWrapper extends StatelessWidget {
           extendBodyBehindAppBar: true,
           resizeToAvoidBottomInset: true,
           appBar: AppBar(
+            leading: (context.router.canPopSelfOrChildren)
+                ? PfIconButton(
+                    onPressed: () => context.router.pop(),
+                    icon: const Icon(BootstrapIcons.chevron_left))
+                : null,
             automaticallyImplyLeading: false,
             backgroundColor: Colors.transparent,
             elevation: 0.0,
-            actions: [
-              PfIconButton(
-                  onPressed: () => context.router.pop(),
-                  icon: const Icon(BootstrapIcons.x))
-            ],
           ),
-          bottomSheet: Container(
-            color: theme.backgroundColor,
-            padding: const EdgeInsets.all(
-              kPagePadding,
-            ),
-            child: bottomSheet,
-          ),
+          bottomSheet: bottomSheet != null
+              ? Container(
+                  color: theme.backgroundColor,
+                  padding: const EdgeInsets.all(
+                    kPagePadding,
+                  ),
+                  child: bottomSheet,
+                )
+              : null,
           body: CustomScrollView(
-            physics: const ClampingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             slivers: [
               SliverFillRemaining(
                 hasScrollBody: false,

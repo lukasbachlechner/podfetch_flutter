@@ -12,11 +12,14 @@ class PodcastScrollList extends HookWidget {
   }) : super(key: key);
 
   final bool isLoading;
-  final List<Podcast>? podcasts;
+  final List<Podcast?>? podcasts;
 
   @override
   Widget build(BuildContext context) {
     if (!isLoading && podcasts != null) {
+      if (podcasts!.isEmpty) {
+        return const SizedBox.shrink();
+      }
       return SizedBox(
         height: 200,
         child: ListView.builder(
@@ -24,7 +27,7 @@ class PodcastScrollList extends HookWidget {
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
               final podcast = podcasts![index];
-              return PodcastsScrollListItem(podcast: podcast);
+              return PodcastsScrollListItem(podcast: podcast!);
             },
             itemCount: podcasts!.length),
       );

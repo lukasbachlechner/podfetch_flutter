@@ -209,9 +209,13 @@ class SingleEpisodePage extends HookConsumerWidget {
     }
 
     return const PageWrap(
-      child: Center(
-        child: CircularProgressIndicator(),
-      ),
+      children: [
+        SliverFillRemaining(
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+      ],
     );
   }
 }

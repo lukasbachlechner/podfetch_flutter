@@ -79,16 +79,16 @@ class AudioPlayerModel extends ChangeNotifier {
       notifyListeners();
     });
 
-    /* player.positionStream
+    player.positionStream
         .throttleTime(const Duration(seconds: 1))
         .listen((currentPosition) {
-      if (currentEpisode != null) {
+      if (currentEpisode != null && currentPosition != Duration.zero) {
         websocketsProvider.setPlaybackTime(
           currentEpisode!,
           currentPosition,
         );
       }
-    }); */
+    });
 
     player.positionStream.listen((currentPosition) {
       progress = currentPosition;

@@ -8,14 +8,21 @@ import '../media/image.dart';
 import '../skeleton/skeleton_box.dart';
 
 class SearchResultPodcastItem extends StatelessWidget {
-  const SearchResultPodcastItem({Key? key, required this.podcast})
+  const SearchResultPodcastItem(
+      {Key? key, required this.podcast, this.beforeNavigate})
       : super(key: key);
   final Podcast podcast;
+  final VoidCallback? beforeNavigate;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.navigateTo(
-          SinglePodcastRoute(podcast: podcast, podcastId: podcast.id)),
+      onTap: () {
+        if (beforeNavigate != null) {
+          beforeNavigate!();
+        }
+        context.navigateTo(
+            SinglePodcastRoute(podcast: podcast, podcastId: podcast.id));
+      },
       child: Container(
         padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(

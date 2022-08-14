@@ -10,8 +10,13 @@ class LoginForm extends HookConsumerWidget {
   const LoginForm({Key? key, required this.onLogin}) : super(key: key);
   final Future<void> Function() onLogin;
 
-  void _tryLogin(WidgetRef ref, String email, String password,
-      VoidCallback onSuccess, VoidCallback onError) async {
+  void _tryLogin(
+    WidgetRef ref,
+    String email,
+    String password,
+    VoidCallback onSuccess,
+    VoidCallback onError,
+  ) async {
     final auth = await ref.watch(authProvider.notifier).login(email, password);
     if (auth) {
       onSuccess();
@@ -32,15 +37,15 @@ class LoginForm extends HookConsumerWidget {
       formKey.currentState!.validate();
 
       _tryLogin(ref, emailState.value!, passwordState.value!, () {
-        onLogin().then(
+        /* onLogin().then(
           (value) => const NotificationBar(
             message: 'Successfully logged in.',
             notificationType: NotificationBarType.success,
           ).show(context),
-        );
+        ); */
         // SnackbarService.show(context, 'Successfully logged in!');
         // await context.router.pop();
-        // onLogin();
+        onLogin();
       }, () {
         const NotificationBar(
           message: 'Invalid credentials.',

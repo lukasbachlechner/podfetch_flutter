@@ -6,9 +6,13 @@ import 'package:podfetch_flutter/home_page.dart';
 import 'package:podfetch_flutter/pages/categories/single_category_page.dart';
 import 'package:podfetch_flutter/pages/discover_page.dart';
 import 'package:podfetch_flutter/pages/flows/login/login_page.dart';
-import 'package:podfetch_flutter/pages/flows/signup/email_page.dart';
+import 'package:podfetch_flutter/pages/flows/onboarding_page.dart';
+import 'package:podfetch_flutter/pages/flows/signup/choose_categories_page.dart';
+import 'package:podfetch_flutter/pages/flows/signup/create_account_page.dart';
+import 'package:podfetch_flutter/pages/flows/signup/new_account_page.dart';
 import 'package:podfetch_flutter/pages/language_select_page.dart';
 import 'package:podfetch_flutter/pages/lists_page.dart';
+import 'package:podfetch_flutter/pages/personal_page.dart';
 import 'package:podfetch_flutter/pages/search_page.dart';
 import 'package:podfetch_flutter/pages/settings_page.dart';
 import 'package:podfetch_flutter/pages/signup_page.dart';
@@ -29,7 +33,7 @@ const categoryRoute = AutoRoute(path: ':categoryId', page: SingleCategoryPage);
 @CupertinoAutoRouter(
   replaceInRouteName: 'Page,Route',
   routes: <AutoRoute>[
-    CustomRoute(
+    /*  CustomRoute(
       page: SignupPage,
       transitionsBuilder: TransitionsBuilders.fadeIn,
       path: '/signup',
@@ -37,11 +41,21 @@ const categoryRoute = AutoRoute(path: ':categoryId', page: SingleCategoryPage);
         AutoRoute(page: EmailPage),
         AutoRoute(page: PasswordPage),
       ],
-    ),
+    ), */
     CustomRoute(
-      page: LoginPage,
-      transitionsBuilder: TransitionsBuilders.slideBottom,
-      path: '/login',
+      page: EmptyRouterPage,
+      name: 'OnboardingRouter',
+      transitionsBuilder: TransitionsBuilders.fadeIn,
+      path: '/onboarding',
+      children: [
+        AutoRoute(page: OnboardingPage, path: ''),
+        AutoRoute(page: LoginPage, path: 'login'),
+        AutoRoute(page: CreateAccountPage, path: 'create-account', children: [
+          AutoRoute(page: NewAccountPage),
+          AutoRoute(page: ChooseCategoriesPage),
+        ]),
+        // AutoRoute(page: SignupPage, path: 'signup'),
+      ],
     ),
     CustomRoute(
       path: '/',
@@ -51,6 +65,16 @@ const categoryRoute = AutoRoute(path: ':categoryId', page: SingleCategoryPage);
       children: <AutoRoute>[
         AutoRoute(
           path: '',
+          name: 'PersonalRouter',
+          page: EmptyRouterPage,
+          children: [
+            AutoRoute(path: '', page: PersonalPage),
+            ...podcastRoutes,
+            categoryRoute
+          ],
+        ),
+        AutoRoute(
+          path: 'discover',
           name: 'DiscoverRouter',
           page: EmptyRouterPage,
           children: [

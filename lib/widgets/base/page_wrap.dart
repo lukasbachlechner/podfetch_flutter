@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart' as cupertino;
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:podfetch_flutter/widgets/base/app_bar.dart';
 import '../../providers.dart';
 import '../../providers/page_title_provider.dart';
 
@@ -59,7 +60,6 @@ class PageWrap extends ConsumerStatefulWidget {
     Key? key,
     this.title,
     this.useSlivers = false,
-    this.child,
     this.children,
   })  : _refreshable = false,
         onRefresh = null,
@@ -72,14 +72,12 @@ class PageWrap extends ConsumerStatefulWidget {
     this.title,
   })  : _refreshable = true,
         useSlivers = true,
-        child = null,
         super(key: key);
 
   final bool _refreshable;
   final bool useSlivers;
   final cupertino.RefreshCallback? onRefresh;
   final String? title;
-  final Widget? child;
   final List<Widget>? children;
 
   @override
@@ -101,25 +99,27 @@ class _PageWrapState extends ConsumerState<PageWrap>
 
   @override
   void didPopNext() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (widget.title != null) {
-        ref.read(pageTitleProvider.notifier).set(widget.title!);
-      } else {
-        ref.read(pageTitleProvider.notifier).reset();
-      }
-    });
-
-    super.didPop();
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
+    if (widget.title != null) {
+      ref.read(pageTitleProvider.notifier).set(widget.title!);
+    } else {
+      ref.read(pageTitleProvider.notifier).reset();
+    }
+    super.didPopNext();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget._refreshable || widget.useSlivers) {
-      return Container(
-        color: Theme.of(context).backgroundColor,
+    return Container(
+      color: Theme.of(context).backgroundColor,
+      child: Scrollbar(
         child: CustomScrollView(
           physics: const cupertino.BouncingScrollPhysics(),
           slivers: [
+            if (widget.title != null)
+              SliverPfAppBar(
+                title: widget.title!,
+              ),
             if (widget.onRefresh != null)
               cupertino.CupertinoSliverRefreshControl(
                 onRefresh: widget.onRefresh,
@@ -136,12 +136,7 @@ class _PageWrapState extends ConsumerState<PageWrap>
             ).toList(),
           ],
         ),
-      );
-    }
-
-    return Container(
-      color: Theme.of(context).backgroundColor,
-      child: widget.child,
+      ),
     );
   }
 }

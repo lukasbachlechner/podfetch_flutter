@@ -34,7 +34,8 @@ final websocketsProvider = AutoDisposeProvider<WebsocketService>((ref) {
 
 final authProvider = StateNotifierProvider<AuthStateNotifier, AuthState>((ref) {
   final podfetchApiProvider = ref.read(apiProvider);
-  return AuthStateNotifier(AuthState(null, null), podfetchApiProvider);
+  return AuthStateNotifier(
+      AuthState(null, null, initialized: false), podfetchApiProvider);
 });
 
 final languageProvider =
@@ -50,7 +51,6 @@ final pageTitleProvider =
 final audioPlayerProvider = ChangeNotifierProvider.autoDispose(
   (ref) => AudioPlayerModel(
     apiProvider: ref.read(apiProvider),
-    // authProvider: ref.watch(authProvider),
     snackbarService: ref.read(snackbarProvider),
     websocketsProvider: ref.read(websocketsProvider),
   ),

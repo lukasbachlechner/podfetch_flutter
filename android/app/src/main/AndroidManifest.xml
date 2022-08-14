@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.podfetch_flutter" xmlns:tools="http://schemas.android.com/tools">
+    package="com.lukasbachlechner.podfetch" xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <!-- ADD THESE TWO PERMISSIONS -->
@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
    <application
-        android:label="podfetch_flutter"
+        android:label="Podfetch"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">

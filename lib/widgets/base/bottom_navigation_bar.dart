@@ -61,14 +61,20 @@ class PfBottomNavigationBar extends HookConsumerWidget {
           ),
           _buildItem(
             context: context,
+            icon: BootstrapIcons.compass,
+            activeIcon: BootstrapIcons.compass_fill,
+            label: 'Discover',
+          ),
+          /*   _buildItem(
+            context: context,
             icon: BootstrapIcons.search,
             activeIcon: BootstrapIcons.search,
             label: 'Search',
-          ),
+          ), */
           _buildItem(
             context: context,
-            icon: BootstrapIcons.view_list,
-            activeIcon: BootstrapIcons.view_list,
+            icon: BootstrapIcons.heart,
+            activeIcon: BootstrapIcons.heart_fill,
             label: 'Lists',
           ),
           _buildItem(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum ButtonType { accent, muted }
+enum ButtonType { accent, muted, ghost }
 
 enum ButtonSize { small, large }
 
@@ -81,6 +81,7 @@ class PfButton extends StatelessWidget {
       ButtonType.muted: const ButtonTypeStyle(color: Colors.white24),
       ButtonType.accent:
           ButtonTypeStyle(color: Theme.of(context).highlightColor),
+      ButtonType.ghost: const ButtonTypeStyle(color: Colors.transparent),
     };
 
     final sizes = <ButtonSize, ButtonSizeStyle>{

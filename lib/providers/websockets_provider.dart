@@ -16,23 +16,21 @@ class WebsocketService {
     required this.baseUrl,
     required this.auth,
   }) {
-    if (auth.isLoggedIn) {
-      final authToken = auth.token;
-      socket = io(
-        baseUrl,
-        OptionBuilder()
-            .setAuth({
-              'token': authToken,
-            })
-            .setTransports(['websocket'])
-            .enableAutoConnect()
-            .build(),
-      );
+    final authToken = auth.token;
+    socket = io(
+      baseUrl,
+      OptionBuilder()
+          .setAuth({
+            'token': authToken,
+          })
+          .setTransports(['websocket'])
+          .enableAutoConnect()
+          .build(),
+    );
 
-      socket!.on('connect', (_) {
-        debugPrint('WebSocket connected.');
-      });
-    }
+    socket!.on('connect', (_) {
+      debugPrint('WebSocket connected.');
+    });
   }
 
   void setupConnections() {}

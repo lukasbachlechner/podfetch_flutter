@@ -58,7 +58,9 @@ class ContentPage extends HookWidget {
     }
     return PageWrap(
       title: title,
-      child: childWrap,
+      children: [
+        childWrap,
+      ],
     );
   }
 }

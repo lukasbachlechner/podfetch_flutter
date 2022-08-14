@@ -42,6 +42,38 @@ class PfAppBar extends ConsumerWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
+class SliverPfAppBar extends ConsumerWidget implements PreferredSizeWidget {
+  const SliverPfAppBar({
+    Key? key,
+    this.title,
+    this.actions,
+  }) : super(key: key);
+
+  final String? title;
+  final List<Widget>? actions;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SliverAppBar(
+      automaticallyImplyLeading: false,
+      pinned: true,
+      forceElevated: true,
+      backgroundColor: Theme.of(context).primaryColor,
+      title: Text(title ?? ''),
+      leading: context.tabsRouter.canPopSelfOrChildren
+          ? PfIconButton(
+              onPressed: () => context.router.popTop(),
+              icon: const Icon(BootstrapIcons.arrow_left),
+            )
+          : null,
+      actions: [...?actions],
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
 class PfAppBarCircleButton extends StatelessWidget {
   const PfAppBarCircleButton({
     Key? key,

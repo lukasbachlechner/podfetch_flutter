@@ -31,62 +31,61 @@ class LanguageSelectPage extends HookConsumerWidget {
 
     return PageWrap(
       title: 'Language',
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const SizedBox(height: 16.0),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: kPagePadding),
-            child: Text(
-                'This is the default language that you prefer to listen podcasts to.'),
+      children: [
+        const SizedBox(height: 16.0),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: kPagePadding),
+          child: Text(
+              'This is the default language that you prefer to listen podcasts to.'),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: kPagePadding,
+            vertical: 16.0,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: kPagePadding,
-              vertical: 16.0,
+          child: TextField(
+            controller: searchFieldController,
+            decoration: InputDecoration(
+              label: const Text('Search'),
+              prefixIcon: const Icon(BootstrapIcons.search),
+              suffixIcon: searchTerm.value.isNotEmpty
+                  ? GestureDetector(
+                      onTap: () {
+                        searchTerm.value = '';
+                        searchFieldController.text = '';
+                      },
+                      child: const Icon(
+                        BootstrapIcons.x,
+                      ),
+                    )
+                  : null,
             ),
-            child: TextField(
-              controller: searchFieldController,
-              decoration: InputDecoration(
-                label: const Text('Search'),
-                prefixIcon: const Icon(BootstrapIcons.search),
-                suffixIcon: searchTerm.value.isNotEmpty
-                    ? GestureDetector(
-                        onTap: () {
-                          searchTerm.value = '';
-                          searchFieldController.text = '';
-                        },
-                        child: const Icon(
-                          BootstrapIcons.x,
-                        ),
-                      )
-                    : null,
-              ),
-              textInputAction: TextInputAction.search,
-              onChanged: (query) => searchTerm.value = query,
-            ),
+            textInputAction: TextInputAction.search,
+            onChanged: (query) => searchTerm.value = query,
           ),
-          Expanded(
-            child: ListView.separated(
-              padding: EdgeInsets.zero,
-              itemBuilder: (context, index) {
-                final language = languages[index];
-                return RadioListTile(
-                  value: language.isoCode,
-                  groupValue: currentLanguage.value,
-                  onChanged: (value) {
-                    ref.read(languageProvider.notifier).setLanguage(value);
-                    currentLanguage.value = value as String;
-                  },
-                  title: Text(language.name),
-                );
-              },
-              separatorBuilder: (_, __) => const Divider(height: 2.0),
-              itemCount: languages.length,
-            ),
+        ),
+        SliverFillRemaining(
+          child: ListView.separated(
+            shrinkWrap: true,
+            primary: false,
+            padding: EdgeInsets.zero,
+            itemBuilder: (context, index) {
+              final language = languages[index];
+              return RadioListTile(
+                value: language.isoCode,
+                groupValue: currentLanguage.value,
+                onChanged: (value) {
+                  ref.read(languageProvider.notifier).setLanguage(value);
+                  currentLanguage.value = value as String;
+                },
+                title: Text(language.name),
+              );
+            },
+            separatorBuilder: (_, __) => const Divider(height: 2.0),
+            itemCount: languages.length,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

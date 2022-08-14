@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:just_audio_background/just_audio_background.dart';
@@ -13,6 +14,9 @@ import 'routes/router.gr.dart';
 import 'theme.dart';
 
 void main() async {
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   await JustAudioBackground.init(
     androidNotificationChannelId: 'com.lukasbachlechner.podfetch.channel.audio',
     androidNotificationChannelName: 'Audio playback',
@@ -23,6 +27,7 @@ void main() async {
 
   await Hive.initFlutter();
   await Hive.openBox('localSettings');
+  await Hive.openBox('recentSearches');
 
   runApp(
     ProviderScope(
@@ -38,6 +43,20 @@ class AppWidget extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // useMemoized((() => appRouter.authGuard.auth = ref.watch(authProvider)));
+
+    ref.listen<AuthState>(
+      authProvider,
+      (previous, next) async {
+        if (next.initialized) {
+          await Future.delayed(
+            const Duration(seconds: 1),
+            () => FlutterNativeSplash.remove(),
+          );
+        }
+      },
+    );
+
+    final isLoggedIn = ref.watch(authProvider).isLoggedIn;
 
     return GestureDetector(
       onTap: () {
@@ -55,14 +74,12 @@ class AppWidget extends HookConsumerWidget {
             if (ref.watch(authProvider).isLoggedIn)
               const HomeRouter()
             else
-              LoginRoute(
-                onLogin: () {
-                  return Future.value(null);
-                },
-              )
+              const OnboardingRouter()
           ],
         ),
-        // routerDelegate: appRouter.delegate(),
+        /* routerDelegate: appRouter.delegate(initialRoutes: [
+          isLoggedIn ? const HomeRouter() : const OnboardingRouter(),
+        ]), */
         theme: pfDefaultTheme,
         routeInformationParser: appRouter.defaultRouteParser(),
       ),

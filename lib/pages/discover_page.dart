@@ -5,17 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:podfetch_api/providers/api_provider.dart';
+import 'package:podfetch_flutter/widgets/utils/page_container.dart';
 import '../hooks/use_memoized_future.dart';
 import '../providers.dart';
 import '../providers/api_provider.dart';
 import '../providers/auth_provider.dart';
 import '../providers/language_provider.dart';
 import '../routes/router.gr.dart';
+import '../search/search_delegate.dart';
 import '../theme.dart';
 import '../widgets/auth/auth_callout.dart';
 import '../widgets/auth/auth_guard.dart';
+import '../widgets/base/app_bar.dart';
 import '../widgets/buttons/icon_button.dart';
 
+import '../widgets/categories/categories_grid.dart';
 import '../widgets/podcast_carousel/podcast_carousel.dart';
 import '../widgets/typography/heading.dart';
 import '../widgets/utils/spacer.dart';
@@ -62,7 +66,27 @@ class DiscoverPage extends HookConsumerWidget {
         categoriesFetch.refresh();
       },
       children: [
-        const Heading('Discover'),
+        PageContainer(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Heading(
+                'Discover',
+                inPageContainer: false,
+              ),
+              PfAppBarCircleButton(
+                onTap: () {
+                  showSearch(
+                    context: context,
+                    delegate: PodfetchSearchDelegate(ref),
+                    useRootNavigator: true,
+                  );
+                },
+                icon: const Icon(BootstrapIcons.search),
+              ),
+            ],
+          ),
+        ),
         const SizedBox(height: 16.0),
         const Heading(
           'Featured',
@@ -83,44 +107,15 @@ class DiscoverPage extends HookConsumerWidget {
               generalSnapshot.connectionState == ConnectionState.done),
           podcasts: generalSnapshot.data?[1].sublist(5),
         ),
-        const Padding(
-          padding:
-              EdgeInsets.symmetric(horizontal: kPagePadding, vertical: 16.0),
-          child: AuthCallout(),
+        const Heading(
+          'Categories',
+          headingType: HeadingType.h2,
         ),
-        SliverList(
-          delegate: SliverChildBuilderDelegate((context, index) {
-            final category = allCategories[index];
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Heading(
-                      category.title,
-                      headingType: HeadingType.h2,
-                      paddingBottom: 0.0,
-                    ),
-                    PfIconButton(
-                      onPressed: () => context.router
-                          .push(SingleCategoryRoute(categoryId: category.id)),
-                      icon: const Icon(BootstrapIcons.arrow_right),
-                    )
-                  ],
-                ),
-                const SizedBox(height: 8.0),
-                PodcastScrollList(
-                  isLoading: !(categoriesSnapshot.hasData &&
-                      categoriesSnapshot.connectionState ==
-                          ConnectionState.done),
-                  podcasts: categoriesSnapshot.data?[index],
-                ),
-              ],
-            );
-          }, childCount: allCategories.length),
+        const CategoriesGrid(
+          columnCount: 2,
+          aspectRatio: 2 / 1,
         ),
+        const PfSpacer.bottom(),
       ],
     );
   }

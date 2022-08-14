@@ -23,52 +23,50 @@ class AccountPage extends ConsumerWidget {
     }
     return PageWrap(
       title: 'Account',
-      child: Column(
-        children: [
-          AspectRatio(
-            aspectRatio: 1,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: 64.0,
-                    foregroundColor: Colors.white,
-                    backgroundColor: Theme.of(context).primaryColorLight,
-                    child: const Icon(
-                      BootstrapIcons.person,
-                      size: 48.0,
-                    ),
+      children: [
+        AspectRatio(
+          aspectRatio: 1,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  radius: 64.0,
+                  foregroundColor: Colors.white,
+                  backgroundColor: Theme.of(context).primaryColorLight,
+                  child: const Icon(
+                    BootstrapIcons.person,
+                    size: 48.0,
                   ),
-                  const SizedBox(
-                    height: 16.0,
-                  ),
-                  Heading(
-                    auth.user!.email,
-                    headingType: HeadingType.h3,
-                    textAlign: TextAlign.center,
-                  ),
-                  Text('Member since ${formatDate(auth.user!.createdAt)}'),
-                ],
-              ),
+                ),
+                const SizedBox(
+                  height: 16.0,
+                ),
+                Heading(
+                  auth.user!.email,
+                  headingType: HeadingType.h3,
+                  textAlign: TextAlign.center,
+                ),
+                Text('Member since ${formatDate(auth.user!.createdAt)}'),
+              ],
             ),
           ),
-          SettingsTile(
-            title: const Text('Logout'),
-            trailingIcon: const Icon(BootstrapIcons.box_arrow_right),
-            onTap: () async {
-              await ref.watch(audioPlayerProvider).player.stop();
-              await ref.watch(audioPlayerProvider).player.dispose();
-              ref.watch(pageTitleProvider.notifier).reset();
+        ),
+        SettingsTile(
+          title: const Text('Logout'),
+          trailingIcon: const Icon(BootstrapIcons.box_arrow_right),
+          onTap: () async {
+            await ref.watch(audioPlayerProvider).player.stop();
+            await ref.watch(audioPlayerProvider).player.dispose();
+            ref.watch(pageTitleProvider.notifier).reset();
 
-              await authNotifier.logout();
-            },
-          ),
-        ],
-      ),
+            await authNotifier.logout();
+          },
+        ),
+      ],
     );
   }
 }

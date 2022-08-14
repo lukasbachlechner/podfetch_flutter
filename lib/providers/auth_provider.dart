@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:podfetch_api/models/episode.dart';
@@ -13,8 +14,13 @@ import 'api_provider.dart';
 class AuthState {
   final String? token;
   final User? user;
+  final bool initialized;
 
-  AuthState(this.token, this.user);
+  AuthState(
+    this.token,
+    this.user, {
+    this.initialized = true,
+  });
 
   bool get isLoggedIn {
     return token != null && user != null;
@@ -23,7 +29,7 @@ class AuthState {
 
 class AuthStateNotifier extends StateNotifier<AuthState> {
   AuthStateNotifier(AuthState state, this.apiProvider) : super(state) {
-    getUser();
+    init();
   }
   final PodfetchApiProvider apiProvider;
   final FlutterSecureStorage storage = const FlutterSecureStorage();
@@ -34,6 +40,11 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
 
   String? get token {
     return state.token;
+  }
+
+  Future<void> init() async {
+    await getUser();
+    // FlutterNativeSplash.remove();
   }
 
   Future<bool> login(String email, String password) async {
@@ -54,6 +65,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   Future<void> getUser() async {
     final token = await storage.read(key: 'api-token');
     if (token == null) {
+      state = AuthState(null, null);
       return;
     }
     try {

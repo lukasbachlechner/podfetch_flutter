@@ -38,17 +38,15 @@ class StoragePage extends HookConsumerWidget {
       return const SizedBox.shrink();
     } */
     return PageWrap(
+      useSlivers: true,
       title: 'Cache',
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: const [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: kPagePadding),
-            child: Text(
-                'The total size of all cached files, e. g. network images.'),
-          ),
-        ],
-      ),
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: kPagePadding),
+          child:
+              Text('The total size of all cached files, e. g. network images.'),
+        ),
+      ],
     );
   }
 }

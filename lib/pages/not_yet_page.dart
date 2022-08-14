@@ -9,15 +9,12 @@ class NotYetPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PageWrap(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          PfPageHeader(
-            title: context.router.routeData.path.toUpperCase(),
-          ),
-          const Text('Implement me :)'),
-        ],
-      ),
+      children: [
+        PfPageHeader(
+          title: context.router.routeData.path.toUpperCase(),
+        ),
+        const Text('Implement me :)'),
+      ],
     );
   }
 }

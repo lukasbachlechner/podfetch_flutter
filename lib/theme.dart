@@ -48,13 +48,18 @@ final pfDefaultTheme = ThemeData(
       return white;
     }),
   ),
+  cardColor: darkBlue,
+  buttonTheme: const ButtonThemeData(
+    buttonColor: accentRed,
+  ),
   bottomSheetTheme: const BottomSheetThemeData(
     backgroundColor: Colors.transparent,
     modalBackgroundColor: Colors.transparent,
   ),
-  sliderTheme: const SliderThemeData(
+  sliderTheme: SliderThemeData(
     activeTrackColor: accentRed,
     thumbColor: accentRed,
+    overlayColor: accentRed.withOpacity(0.1),
   ),
   inputDecorationTheme: InputDecorationTheme(
     isDense: true,

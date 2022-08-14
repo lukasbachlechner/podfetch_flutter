@@ -107,7 +107,7 @@ class SinglePodcastPage extends HookConsumerWidget {
           ),
           SliverAppBar(
             automaticallyImplyLeading: false,
-            // toolbarHeight: 0,
+            toolbarHeight: 0,
             pinned: true,
             backgroundColor: Theme.of(context).primaryColorDark,
             flexibleSpace: PageContainer(
@@ -118,11 +118,9 @@ class SinglePodcastPage extends HookConsumerWidget {
                 tabs: const [
                   Tab(
                     text: 'Episodes',
-                    height: 48,
                   ),
                   Tab(
                     text: 'Info',
-                    height: 48,
                   ),
                 ],
               ),
@@ -201,9 +199,13 @@ class SinglePodcastPage extends HookConsumerWidget {
     }
 
     return const PageWrap(
-      child: Center(
-        child: CircularProgressIndicator(),
-      ),
+      children: [
+        SliverFillRemaining(
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+      ],
     );
   }
 }

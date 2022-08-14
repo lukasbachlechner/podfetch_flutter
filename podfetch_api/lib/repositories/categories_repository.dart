@@ -210,4 +210,12 @@ class StaticCategory {
     this.children,
     this.iconData,
   });
+
+  @override
+  operator ==(Object other) {
+    return other is StaticCategory && other.id == id && other.title == title;
+  }
+
+  @override
+  int get hashCode => id.hashCode ^ title.hashCode;
 }

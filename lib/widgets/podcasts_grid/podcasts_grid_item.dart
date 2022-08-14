@@ -21,13 +21,16 @@ class PodcastsGridItem extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(4.0),
-            child: PfImage(
-              imageUrl: podcast.safeImage,
-              progressIndicatorBuilder: (context, url, downloadProgress) =>
-                  AspectRatio(
-                aspectRatio: 1,
-                child: Container(
-                  color: Theme.of(context).primaryColor,
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: PfImage(
+                imageUrl: podcast.safeImage,
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    AspectRatio(
+                  aspectRatio: 1,
+                  child: Container(
+                    color: Theme.of(context).primaryColor,
+                  ),
                 ),
               ),
             ),

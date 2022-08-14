@@ -1,4 +1,5 @@
 import 'package:podfetch_api/models/model.dart';
+import 'package:podfetch_api/podfetch_api.dart';
 
 class Category implements Model {
   final int id;

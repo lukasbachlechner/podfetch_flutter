@@ -50,7 +50,7 @@ class NotificationBar extends HookWidget {
       ),
       flushbarPosition: FlushbarPosition.TOP,
       margin: const EdgeInsets.all(kPagePadding),
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 2),
       title: title ?? type.title,
       message: message,
     );

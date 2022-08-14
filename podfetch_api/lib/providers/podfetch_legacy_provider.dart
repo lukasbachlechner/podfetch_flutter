@@ -5,6 +5,8 @@ import 'package:podfetch_api/models/liked_episode.dart';
 import 'package:podfetch_api/models/podcast.dart';
 import 'package:podfetch_api/models/user.dart';
 import 'package:podfetch_api/providers/api_provider.dart';
+import 'package:podfetch_api/requests/signup_request.dart';
+import 'package:podfetch_api/responses/check_email_response.dart';
 import 'package:podfetch_api/responses/episodes_by_podcast_id_response.dart';
 import 'package:podfetch_api/responses/last_played_response.dart';
 import 'package:podfetch_api/responses/login_response.dart';
@@ -51,6 +53,14 @@ abstract class PodfetchLegacyProvider implements PodfetchApiProvider {
   Future<LoginResponse> login(@Body() Map<String, dynamic> json);
 
   @override
+  @GET('auth/check-email')
+  Future<CheckEmailResponse> checkEmail(@Query('email') String email);
+
+  @override
+  @POST('auth/register')
+  Future<User> signUp(@Body() SignupRequest signupRequest);
+
+  @override
   @POST('auth/logout')
   Future<dynamic> logout({@Header('Authorization') String? bearerToken});
 
@@ -77,6 +87,18 @@ abstract class PodfetchLegacyProvider implements PodfetchApiProvider {
   @override
   @GET('user/liked')
   Future<List<Episode?>> getLikedEpisodes();
+
+  @override
+  @GET('user/recent-episodes')
+  Future<List<Episode?>> getRecentEpisodes();
+
+  @override
+  @GET('user/personalized')
+  Future<List<Podcast?>> getPersonalizedPodcasts();
+
+  @override
+  @GET('user/subscribed')
+  Future<List<Podcast?>> getSubscribedPodcasts();
 
   @override
   @POST('likes/like')

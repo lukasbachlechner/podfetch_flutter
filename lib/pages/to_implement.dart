@@ -6,8 +6,8 @@ class ToImplement extends StatelessWidget {
   final String title;
   @override
   Widget build(BuildContext context) {
-    return PageWrap(
-      child: Center(
+    return PageWrap(children: [
+      Center(
         child: Column(
           children: [
             const Text('To Implement'),
@@ -15,6 +15,6 @@ class ToImplement extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ]);
   }
 }

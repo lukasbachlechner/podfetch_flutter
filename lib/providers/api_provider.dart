@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import '../providers.dart';
 
 Dio getDio({required ProviderRef ref}) {
@@ -25,7 +26,7 @@ Dio getDio({required ProviderRef ref}) {
     },
   ));
 
-  /* dio.interceptors.add(PrettyDioLogger(
+/*   dio.interceptors.add(PrettyDioLogger(
     responseBody: true,
     requestHeader: false,
     requestBody: true,

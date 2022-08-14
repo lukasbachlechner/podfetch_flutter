@@ -1,8 +1,12 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:podfetch_api/responses/search_response.dart';
+import 'package:podfetch_flutter/widgets/base/app_bar.dart';
+import 'package:podfetch_flutter/widgets/utils/network.dart';
 import '../hooks/use_memoized_future.dart';
 import '../providers.dart';
 import '../providers/api_provider.dart';
@@ -91,68 +95,63 @@ class SearchPage extends HookConsumerWidget {
     });
 
     return PageWrap(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Heading(
-            'Search',
+      children: [
+        const Heading(
+          'Search',
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: kPagePadding,
+            vertical: 16.0,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: kPagePadding,
-              vertical: 16.0,
-            ),
-            child: TextField(
-              onChanged: (value) => query.value = value,
-              controller: textEditingController,
-              focusNode: focusNode,
-              autofocus: false,
-              decoration: InputDecoration(
-                prefixIcon: AnimatedSwitcher(
-                  duration: const Duration(),
-                  child: searchFetch.snapshot.connectionState !=
-                          ConnectionState.done
-                      ? const Center(
-                          widthFactor: 1,
-                          heightFactor: 1,
-                          child: SizedBox(
-                            width: 16.0,
-                            height: 16.0,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2.0,
+          child: TextField(
+            onChanged: (value) => query.value = value,
+            controller: textEditingController,
+            focusNode: focusNode,
+            autofocus: false,
+            decoration: InputDecoration(
+              prefixIcon: AnimatedSwitcher(
+                duration: const Duration(),
+                child:
+                    searchFetch.snapshot.connectionState != ConnectionState.done
+                        ? const Center(
+                            widthFactor: 1,
+                            heightFactor: 1,
+                            child: SizedBox(
+                              width: 16.0,
+                              height: 16.0,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2.0,
+                              ),
                             ),
-                          ),
-                        )
-                      : const Icon(BootstrapIcons.search, size: 16.0),
-                ),
-                suffixIcon: Visibility(
-                  visible: query.value.isNotEmpty,
-                  child: PfIconButton(
-                    onPressed: () {
-                      textEditingController.text = '';
-                      query.value = '';
-                    },
-                    icon: const Icon(BootstrapIcons.x),
-                  ),
+                          )
+                        : const Icon(BootstrapIcons.search, size: 16.0),
+              ),
+              suffixIcon: Visibility(
+                visible: query.value.isNotEmpty,
+                child: PfIconButton(
+                  onPressed: () {
+                    textEditingController.text = '';
+                    query.value = '';
+                  },
+                  icon: const Icon(BootstrapIcons.x),
                 ),
               ),
             ),
           ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: isSearchFocused.value || query.value.isNotEmpty
-                  ? _showResults(searchFetch.snapshot, query.value)
-                  : const CategoriesGrid(
-                      columnCount: 2,
-                      aspectRatio: 2 / 1,
-                    ),
-            ),
+        ),
+        Expanded(
+          child: SingleChildScrollView(
+            child: isSearchFocused.value || query.value.isNotEmpty
+                ? _showResults(searchFetch.snapshot, query.value)
+                : const CategoriesGrid(
+                    columnCount: 2,
+                    aspectRatio: 2 / 1,
+                  ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
