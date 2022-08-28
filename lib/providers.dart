@@ -43,10 +43,10 @@ final languageProvider =
   return LanguageNotifier();
 });
 
-final pageTitleProvider =
+/* final pageTitleProvider =
     StateNotifierProvider<PageTitleNotifier, String>((ref) {
   return PageTitleNotifier();
-});
+}); */
 
 final audioPlayerProvider = ChangeNotifierProvider.autoDispose(
   (ref) => AudioPlayerModel(

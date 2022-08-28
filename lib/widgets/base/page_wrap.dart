@@ -88,23 +88,23 @@ class _PageWrapState extends ConsumerState<PageWrap>
     with AutoRouteAwareStateMixin {
   @override
   void didPush() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    /* WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.title != null) {
         ref.read(pageTitleProvider.notifier).set(widget.title!);
       }
-    });
+    }); */
 
     super.didPush();
   }
 
   @override
   void didPopNext() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {});
+    /* WidgetsBinding.instance.addPostFrameCallback((_) {});
     if (widget.title != null) {
       ref.read(pageTitleProvider.notifier).set(widget.title!);
     } else {
       ref.read(pageTitleProvider.notifier).reset();
-    }
+    } */
     super.didPopNext();
   }
 

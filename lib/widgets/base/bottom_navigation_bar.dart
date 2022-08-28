@@ -86,22 +86,22 @@ class PfBottomNavigationBar extends HookConsumerWidget {
         ],
         onTap: (int newIndex) {
           currentPageIndex.value = tabsRouter.activeIndex;
-          final lastPageTitle = ref.watch(pageTitleProvider);
+          // final lastPageTitle = ref.watch(pageTitleProvider);
 
           if (tabsRouter.activeIndex != newIndex) {
             tabsRouter.setActiveIndex(newIndex);
-            lastPageTitles.value[currentPageIndex.value] =
-                lastPageTitle.isNotEmpty ? lastPageTitle : null;
+            /*  lastPageTitles.value[currentPageIndex.value] =
+                lastPageTitle.isNotEmpty ? lastPageTitle : null; */
 
-            ref.read(pageTitleProvider.notifier).reset();
+            /* ref.read(pageTitleProvider.notifier).reset(); */
 
-            if (lastPageTitles.value[newIndex] != null) {
+            /* if (lastPageTitles.value[newIndex] != null) {
               ref
                   .read(pageTitleProvider.notifier)
                   .set(lastPageTitles.value[newIndex]!);
 
               lastPageTitles.value[newIndex] = null;
-            }
+            } */
           } else {
             tabsRouter.stackRouterOfIndex(newIndex)?.popUntilRoot();
             // tabsRouter.popTop();

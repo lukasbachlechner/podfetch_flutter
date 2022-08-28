@@ -61,7 +61,6 @@ class AccountPage extends ConsumerWidget {
           onTap: () async {
             await ref.watch(audioPlayerProvider).player.stop();
             await ref.watch(audioPlayerProvider).player.dispose();
-            ref.watch(pageTitleProvider.notifier).reset();
 
             await authNotifier.logout();
           },

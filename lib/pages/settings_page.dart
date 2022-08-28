@@ -36,11 +36,11 @@ class SettingsPage extends HookConsumerWidget {
           title: const Text('Account'),
           onTap: () => context.router.push(const AccountRoute()),
         ),
-        SettingsTile(
+        /*   SettingsTile(
           leading: const Icon(BootstrapIcons.download),
           title: const Text('Storage'),
           onTap: () => context.router.push(const StorageRoute()),
-        ),
+        ), */
         SettingsTile(
           leading: const Icon(BootstrapIcons.translate),
           title: const Text('Language'),

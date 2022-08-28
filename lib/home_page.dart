@@ -17,9 +17,7 @@ class PageTitleObserver extends AutoRouterObserver {
   PageTitleObserver(this.ref) : super();
 
   @override
-  void didPop(route, previousRoute) {
-    ref.read(pageTitleProvider.notifier).reset();
-  }
+  void didPop(route, previousRoute) {}
 
   @override
   void didPush(route, previousRoute) {
@@ -33,8 +31,6 @@ class HomePage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final pageTitleProviderState = ref.read(pageTitleProvider.notifier);
-
-    final hasTitle = ref.watch(pageTitleProvider).isNotEmpty;
 
     return WillPopScope(
       onWillPop: () async {
@@ -64,7 +60,7 @@ class HomePage extends HookConsumerWidget {
 
             final double appBarHeight =
                 kToolbarHeight + MediaQuery.of(context).padding.top;
-            final showAppBar = hasTitle && context.router.canPopSelfOrChildren;
+            final showAppBar = context.router.canPopSelfOrChildren;
 
             const double footerHeight = 120.0;
             const double panelHeaderSize = 80.0;

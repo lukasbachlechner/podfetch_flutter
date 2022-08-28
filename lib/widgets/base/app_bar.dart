@@ -23,11 +23,10 @@ class PfAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   PreferredSizeWidget build(BuildContext context, WidgetRef ref) {
-    final pageTitle = ref.watch(pageTitleProvider);
     return AppBar(
       automaticallyImplyLeading: false,
       backgroundColor: Theme.of(context).primaryColor,
-      title: Text(pageTitle),
+      title: Text(title ?? ''),
       leading: tabsRouter.canPopSelfOrChildren
           ? PfIconButton(
               onPressed: () => context.router.popTop(),
